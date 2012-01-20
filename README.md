@@ -1,5 +1,4 @@
 # Minnesota Crash Finder
 
-This application aims to provide a user-friendly, responsive, interesting way of presenting relevant crash data for the state of Minnesota.
+A project to increase understanding of public Minnesota crash data
 
-TODO:  Almost Everything?
