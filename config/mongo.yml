@@ -1,0 +1,18 @@
+defaults: &defaults
+  host: 127.0.0.1
+  port: 27017
+
+development:
+  <<: *defaults
+  database: mn_crash_finder_development
+
+test:
+  <<: *defaults
+  database: mn_crash_finder_test
+
+# set these environment variables on your prod server
+production:
+  <<: *defaults
+  database: mn_crash_finder
+  username: <%= ENV['MONGO_USERNAME'] %>
+  password: <%= ENV['MONGO_PASSWORD'] %>
