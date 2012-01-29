@@ -1,6 +1,7 @@
 module Reports
   class VehiclesByColor
     include MongoMapper::Document
+    extend MapReduce
     
     key :color, String
     key :vehicles, Integer
@@ -15,20 +16,8 @@ module Reports
       MAP
     end
     
-    def self.reduce
-      <<-REDUCE
-        function(key, values) {
-          var sum = 0;
-          values.forEach(function(value) {
-            sum += value;
-          });
-          return sum;
-        }
-      REDUCE
-    end
-    
     def self.build
-      vehicles_by_color = Crash.collection.map_reduce(map, reduce, { :out => "by_weekday" }).find()
+      vehicles_by_color = Crash.collection.map_reduce(map, sum, { :out => "by_weekday" }).find()
       VehiclesByColor.collection.drop()
       vehicles_by_color.each do |c|
         VehiclesByColor.create(:color => c['_id'], :vehicles => c['value'])

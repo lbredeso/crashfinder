@@ -1,6 +1,7 @@
 module Reports
   class CrashesByMonth
     include MongoMapper::Document
+    extend MapReduce
     
     key :month, String
     key :crashes, Integer
@@ -13,20 +14,8 @@ module Reports
       MAP
     end
     
-    def self.reduce
-      <<-REDUCE
-        function(key, values) {
-          var sum = 0;
-          values.forEach(function(value) {
-            sum += value;
-          });
-          return sum;
-        }
-      REDUCE
-    end
-    
     def self.build
-      crashes_by_month = Crash.collection.map_reduce(map, reduce, { :out => "crashes_by_month" }).find()
+      crashes_by_month = Crash.collection.map_reduce(map, sum, { :out => "crashes_by_month" }).find()
       CrashesByMonth.collection.drop()
       crashes_by_month.each do |m|
         CrashesByMonth.create(:month => m['_id'], :crashes => m['value'])
