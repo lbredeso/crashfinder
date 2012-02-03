@@ -5,15 +5,16 @@ DATE_RANGE = (2004..2010)
 BATCH_SIZE = 1000
 
 namespace :data do
-  desc "Load crash data"
+  desc "Create indexes"
   task :create_indexes => :environment do
     Crash.ensure_index [[:accn, 1]], :unique => true
     Crash.ensure_index [[:city, 1], [:year, 1]]
     Crash.ensure_index [[:county, 1], [:year, 1]]
     Crash.ensure_index [[:day, 1]]
+    Crash.ensure_index [[:locrel, 1], [:year, 1]]
     Crash.ensure_index [[:month, 1]]
-    Crash.ensure_index [[:year, 1]]
     Crash.ensure_index [[:weekday, 1]]
+    Crash.ensure_index [[:year, 1]]
     Crash.ensure_index [["vehicles.vehcolor", 1]]
   end
   
@@ -73,14 +74,16 @@ namespace :data do
       end
     end
     
-    desc "Generate county files"
-    task :generate_county => :environment do
+    desc "Generate location file"
+    task :generate_location_file, [:year] => :environment do |t, args|
+      year = args.year
       page_size = 1000
-      last_page = Crash.count / page_size
-      CSV.open("crash-location-data.csv", "wb") do |csv|
+      last_page = Crash.count(:year => year, :locrel => [1, 2, 3]) / page_size + 1
+      puts "Generating crash location file for #{year}"
+      CSV.open("mn-#{year}-loc.csv", "wb") do |csv|
         current_page = 1
         until current_page > last_page
-          crashes = Crash.paginate({:county => 62, :order => :accn, :per_page => page_size, :page => current_page})
+          crashes = Crash.paginate({:year => year, :locrel => [1, 2, 3], :order => :accn, :per_page => page_size, :page => current_page})
           crashes.each do |crash|
             csv << [crash.accn, crash.route_id, crash.mile_point]
           end
