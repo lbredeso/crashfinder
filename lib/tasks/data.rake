@@ -11,6 +11,8 @@ task :create_indexes => :environment do
   Crash.ensure_index [[:county, 1], [:year, 1]]
   Crash.ensure_index [[:day, 1]]
   Crash.ensure_index [[:locrel, 1], [:year, 1]]
+  Crash.ensure_index [[:location, '2d']]
+  Crash.ensure_index [[:location, '2d'], [:year, 1]]
   Crash.ensure_index [[:month, 1]]
   Crash.ensure_index [[:weekday, 1]]
   Crash.ensure_index [[:year, 1]]
@@ -88,6 +90,17 @@ namespace :crashes do
         end
         current_page += 1
       end
+    end
+  end
+  
+  desc "Update locations from given file"
+  task :update_locations, [:file] => :environment do |t, args|
+    file = args.file
+    puts "Updating locations from #{file}"
+    CSV.foreach("lib/data/location/#{file}") do |row|
+      crash = Crash.find_by_accn(row[0])
+      puts "Update crash location for accn #{crash.accn}"
+      crash.update_attributes :location => [row[1].to_f, row[2].to_f]
     end
   end
 end

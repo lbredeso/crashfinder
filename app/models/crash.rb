@@ -67,5 +67,6 @@ class Crash
   key :day, String
   key :year, String
   key :weekday, String
+  key :location, Array
 
 end
