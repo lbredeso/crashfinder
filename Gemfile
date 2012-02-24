@@ -13,6 +13,9 @@ group :assets do
   gem 'uglifier'
 end
 
+gem 'pry'
+gem 'pry-rails'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

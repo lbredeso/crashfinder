@@ -78,8 +78,7 @@ namespace :crashes do
   desc "Generate location file"
   task :generate_location_file, [:year] => :environment do |t, args|
     year = args.year
-    page_size = 1000
-    last_page = Crash.count(:year => year, :locrel => [1, 2, 3]) / page_size + 1
+    last_page = Crash.count(:year => year, :locrel => [1, 2, 3]) / BATCH_SIZE + 1
     puts "Generating crash location file for #{year}"
     CSV.open("mn-#{year}-loc.csv", "wb") do |csv|
       current_page = 1
