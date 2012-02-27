@@ -8,12 +8,15 @@ Work in progress, please report issues.
 
 ## Installation
 
-* Clone regular OpenShift repository 
+* Create OpenShift application with 'raw-0.1' type
+* Clone OpenShift repository 
 * Add this repository to your repository
 * Pull from this repository
 
+
 * Copy .openshift/config.example to .openshift/config
 * Adjust settings in .openshift/config
+
 
 * Develop your application
 * Deploy your application
