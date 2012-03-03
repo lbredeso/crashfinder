@@ -4,21 +4,6 @@ require 'csv'
 DATE_RANGE = (2004..2010)
 BATCH_SIZE = 1000
 
-desc "Create indexes"
-task :create_indexes => :environment do
-  Crash.ensure_index [[:accn, 1]], :unique => true
-  Crash.ensure_index [[:city, 1], [:year, 1]]
-  Crash.ensure_index [[:county, 1], [:year, 1]]
-  Crash.ensure_index [[:day, 1]]
-  Crash.ensure_index [[:locrel, 1], [:year, 1]]
-  Crash.ensure_index [[:location, '2d']]
-  Crash.ensure_index [[:location, '2d'], [:year, 1]]
-  Crash.ensure_index [[:month, 1]]
-  Crash.ensure_index [[:weekday, 1]]
-  Crash.ensure_index [[:year, 1]]
-  Crash.ensure_index [["vehicles.vehcolor", 1]]
-end
-
 namespace :crashes do
   desc "Load crash data"
   task :load, [:year] => :environment do |t, args|
