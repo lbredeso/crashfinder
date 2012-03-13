@@ -8,18 +8,34 @@ Work in progress, please report issues.
 
 ## Installation
 
-* Create OpenShift application with 'raw-0.1' type
-* Clone OpenShift repository 
-* Add this repository to your repository
-* Pull from this repository
+Create OpenShift application
 
+	rhc app create -a $name -t raw-0.1
 
-* Copy .openshift/config.example to .openshift/config
-* Adjust settings in .openshift/config
+and enter the directory
 
+	cd $name
 
-* Develop your application
-* Deploy your application
+Add this repository as new remote
+
+	git remote add template -m master git://github.com/marekjelen/openshift-jruby.git
+
+and pull locally
+
+	git pull -s recursive -X theirs template master
+
+configure your application
+
+	cp .openshift/config.example .openshift/config
+	$EDITOR .openshift/config
+
+and deploy to OpenShift
+
+	git push origin master
+
+Now, your application is available at
+
+	http://$name-$namespace.rhcloud.com
 
 ## What it does?
 
