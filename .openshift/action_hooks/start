@@ -6,8 +6,11 @@ cd $OPENSHIFT_REPO_DIR
 
 JAVA_VERSION="jdk1.7.0_03"
 
-export JAVA_HOME="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}"
-PATH="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}/bin:$PATH"
+if [ "$USE_ORACLE_JDK" = "I agree with Oracle's license terms" ]; then
+    export JAVA_HOME="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}"
+    PATH="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}/bin:$PATH"
+fi
+
 PATH="${OPENSHIFT_DATA_DIR}jruby-$VERSION/bin:$PATH"
 
 if [[ -e Gemfile ]]; then
