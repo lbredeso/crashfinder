@@ -4,6 +4,10 @@ cd $OPENSHIFT_REPO_DIR
 
 . ".openshift/config"
 
+JAVA_VERSION="jdk1.7.0_03"
+
+export JAVA_HOME="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}"
+PATH="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}/bin:$PATH"
 PATH="${OPENSHIFT_DATA_DIR}jruby-$VERSION/bin:$PATH"
 
 if [[ -e Gemfile ]]; then
@@ -28,7 +32,7 @@ if [[ -e config.rb ]]; then
 	nohup bash -c "exec 'jruby' 'config.rb' &> ${OPENSHIFT_LOG_DIR}jruby.log" &> /dev/null &
 	echo $! > .openshift/application.pid
 elif [[ -e config.ru ]]; then
-	nohup bash -c "exec 'jruby' '-S' 'trinidad' '-p' '$OPENSHIFT_INTERNAL_PORT' '--address' '$OPENSHIFT_INTERNAL_IP' '-e' '$RACK_ENV' &> ${OPENSHIFT_LOG_DIR}jruby.log"  &> /dev/null &
+	nohup bash -c "exec 'jruby' '-S' 'mizuno' '-p' '$OPENSHIFT_INTERNAL_PORT' '-o' '$OPENSHIFT_INTERNAL_IP' '-E' '$RACK_ENV' &> ${OPENSHIFT_LOG_DIR}jruby.log"  &> /dev/null &
 	echo $! > .openshift/application.pid
 else
 	echo "Do not know what to do!"

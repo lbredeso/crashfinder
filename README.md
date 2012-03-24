@@ -39,11 +39,12 @@ Now, your application is available at
 
 ## What it does?
 
+* Installs JDK7 if wanted
 * Installs JRuby if needed
 * Bundles gems if needed
 * Starts application process
 	* config.ru for rackup web applications
-	* config.rb for non-rackup web applications
+	* config.rb for non-rackup applications
 
 ## Configuration
 
@@ -51,8 +52,15 @@ Configuration parameters are stored in .openshift/config
 
 	VERSION="1.6.7" # JRuby version to use
 	RACK_ENV="production" # Environment used for application
+    USE_ORACLE_JDK="I agree with Oracle's license terms" # Use Oracle's JDK to support Java7
+
+## Legal
+
+This template allows downloading Oracle's JDK, by using USE_ORACLE_JDK configuration directive you **agree with Oracle's license agreement**
+
+	http://www.oracle.com/technetwork/java/javase/terms/license/index.html
 
 ## Tools
 
 * Bundler
-* Trinidad
+* Mizuno
