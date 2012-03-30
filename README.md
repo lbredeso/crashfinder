@@ -10,7 +10,7 @@ Work in progress, please report issues.
 
 Create OpenShift application
 
-	rhc app create -a $name -t raw-0.1
+	rhc app create -a $name -t diy-0.1
 
 and enter the directory
 
