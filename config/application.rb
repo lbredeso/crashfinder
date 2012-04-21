@@ -53,5 +53,7 @@ module MnCrashFinder
     config.generators do |g|
       g.orm :mongo_mapper
     end
+    
+    config.google_maps_api_key = 'AIzaSyD4r3KeWVYqznBAfRsqoQw0q5PIt8To3HE'
   end
 end
