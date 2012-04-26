@@ -4,34 +4,8 @@
 
 JRUBY_PATH="jruby-$VERSION"
 JRUBY_ARCH="jruby-bin-$VERSION.tar.gz"
-JAVA_VERSION="jdk1.7.0_03"
-JAVA_URL="http://download.oracle.com/otn-pub/java/jdk/7u3-b04/jdk-7u3-linux-x64.tar.gz"
 
 cd $OPENSHIFT_DATA_DIR
-
-if [ "$USE_ORACLE_JDK" = "I agree with Oracle's license terms" ]; then
-
-    echo "Going to use Oracle's JDK."
-
-    if [[ -d ${JAVA_VERSION} ]]; then
-	    echo "Java $JAVA_VERSION already installed."
-    else
-	    for version in jdk*; do
-		    echo "Removing $version"
-		    rm -rf $version
-	    done
-
-	    echo "Installing Java $JAVA_VERSION"
-
-	    curl -o jdk-download.tar.gz "$JAVA_URL"
-	    tar -xf jdk-download.tar.gz
-	    rm jdk-download.tar.gz
-    fi
-
-    export JAVA_HOME="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}"
-    PATH="${OPENSHIFT_DATA_DIR}${JAVA_VERSION}/bin:$PATH"
-
-fi
 
 if [[ -d $JRUBY_PATH ]]; then
 	echo "JRuby already installed."
@@ -56,6 +30,6 @@ else
 	PATH="${OPENSHIFT_DATA_DIR}jruby-$VERSION/bin:$PATH"
 
 	jruby -S gem install bundler
-	jruby -S gem install mizuno
+	jruby -S gem install trinidad
 
 fi
