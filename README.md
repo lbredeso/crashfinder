@@ -55,4 +55,4 @@ Configuration parameters are stored in .openshift/config
 ## Tools
 
 * Bundler
-* Mizuno
+* Trinidad
