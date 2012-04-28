@@ -1,7 +1,9 @@
 MnCrashFinder::Application.routes.draw do
   root :to => 'crashes#map'
   
-  resources :crashes
+  #resources :crashes
+  
+  get '/crashes/map' => 'crashes#map'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
