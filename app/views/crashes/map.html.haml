@@ -11,7 +11,7 @@
     var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     
     $.ajax({
-      url: '/crashes/map',
+      url: "#{year_crashes_path('2010')}",
       dataType: 'json',
       success: function(response) {
         $.each(response, function(index, crashData) {

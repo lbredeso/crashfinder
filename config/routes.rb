@@ -1,7 +1,10 @@
 MnCrashFinder::Application.routes.draw do
   root :to => 'crashes#map'
   
-  #resources :crashes
+  resources :crashes
+  resources :years do
+    resources :crashes, :only => [:index]
+  end
   
   get '/crashes/map' => 'crashes#map'
 
