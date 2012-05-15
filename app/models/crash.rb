@@ -16,7 +16,7 @@ class Crash
   key :bridge, String
   key :city, String
   key :ciorto, String
-  key :county, Integer
+  key :county, String
   key :diagram, Integer
   key :funclas, Integer
   key :hitrun, String
@@ -68,5 +68,5 @@ class Crash
   key :year, String
   key :weekday, String
   key :location, Array
-
+  
 end
