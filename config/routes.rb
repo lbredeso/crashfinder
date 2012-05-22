@@ -1,12 +1,23 @@
 MnCrashFinder::Application.routes.draw do
-  root :to => 'crashes#map'
+  root :to => 'counties#map'
   
-  resources :crashes
-  resources :years do
-    resources :crashes, :only => [:index]
+  resources :crashes, :only => [:index, :show] do
+    collection do
+      get 'map'
+    end
+    collection do
+      resources :counties, :only => [:index] do
+        collection do
+          get 'map'
+        end
+      end
+      resources :cities, :only => [:index] do
+        collection do
+          get 'map'
+        end
+      end
+    end
   end
-  
-  get '/crashes/map' => 'crashes#map'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

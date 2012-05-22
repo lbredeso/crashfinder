@@ -5,18 +5,19 @@
     var mapOptions = {
       // The center is in St. Paul at the moment.
       center: new google.maps.LatLng(44.954215, -93.089819),
-      zoom: 12,
+      zoom: 6,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     
     $.ajax({
-      url: "#{map_year_county_path(2010, 62)}",
+      url: "#{map_counties_path}?year=2010",
       dataType: 'json',
       success: function(response) {
         $.each(response, function(index, crashData) {
+          var location = crashData.value.location;
           var crash = new google.maps.Marker({
-            position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
+            position: new google.maps.LatLng(location[1], location[0]),
             title: 'A crash'
           });
           crash.setMap(map);
