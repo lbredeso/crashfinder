@@ -20,7 +20,7 @@ end
 
 # Save township mappings
 seedfile = File.join seeds, 'township.csv'
-county_codes = Code.where(type: 'county').all.inject({}) { |total, cc| total[cc.value] = cc.id; total }
+county_codes = Code.value_map 'county'
 
 CSV.foreach seedfile do |row|
   township = row[1][1..3]

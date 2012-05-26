@@ -12,6 +12,7 @@ namespace :crashes do
     puts "Loading crash data for #{year}"
     year_file = File.join Rails.root, "lib", "data", "crash", "mn-#{year}-acc.txt"
     crashes = []
+    code_map = Code.map
     File.open(year_file).each_line do |line|
       crash = {}
       data = line.unpack layout[:pattern]
@@ -23,6 +24,9 @@ namespace :crashes do
         when "String" then "to_s"
         end
         crash[field.name.intern] = data[index].send(converter)
+        if code_map[field.name]
+          crash["#{field.name}_name"] = code_map[field.name][crash[field.name.intern]]
+        end
       end
       crash[:route_id] = crash[:rtsys][1..2] + pad_rtnumber(crash[:rtnumber])
       crash[:mile_point] = "#{crash[:truem1]}.#{crash[:truem3]}".to_f
@@ -31,6 +35,16 @@ namespace :crashes do
       crash[:day] = $2
       crash[:year] = $3
       crash[:weekday] = Date.strptime(crash[:accdate], "%m/%d/%Y").strftime("%A")
+      
+      # Townships are a weird case, as they are uniquely identified by county + township code
+      # They also are thrown in with the city code, in cases where the city isn't known (e.g. rural crashes).
+      crash[:city_township] = if crash[:city].size == 3
+        "#{crash[:county]}#{crash[:city]}"
+      else
+        crash[:city]
+      end
+      crash[:city_township_name] = code_map['city_township'][crash[:city_township]]
+      
       crashes << crash
       if crashes.size % BATCH_SIZE == 0
         puts "Saving..."
