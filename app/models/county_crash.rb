@@ -6,9 +6,9 @@ class CountyCrash
   def self.map
     <<-MAP
       function() {
-        if (this.location && this.county != '0') {
+        if (this.location && this.county_name) {
           emit({
-            county: this.county.toString(), year: this.year
+            county: this.county_name, year: this.year
           }, {
             latitude_sum: this.location[0],
             longitude_sum: this.location[1],
@@ -47,5 +47,14 @@ class CountyCrash
   
   def self.build
     Crash.collection.map_reduce(map, reduce, { :out => "county_crashes", :finalize => finalize })
+  end
+  
+  def as_json options = {}
+    {
+      county: self.id['county'],
+      year: self.id['year'],
+      count: self.value['count'],
+      location: self.value['location']
+    }
   end
 end

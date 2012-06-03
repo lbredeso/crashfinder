@@ -1,21 +1,13 @@
 MnCrashFinder::Application.routes.draw do
-  root :to => 'counties#map'
+  root :to => 'crashes#map'
   
   resources :crashes, :only => [:index, :show] do
     collection do
       get 'map'
     end
     collection do
-      resources :counties, :only => [:index] do
-        collection do
-          get 'map'
-        end
-      end
-      resources :cities, :only => [:index] do
-        collection do
-          get 'map'
-        end
-      end
+      resources :counties, :only => [:index]
+      resources :cities, :only => [:index]
     end
   end
 

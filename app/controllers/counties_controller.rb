@@ -1,5 +1,5 @@
 class CountiesController < ApplicationController
-  def map
+  def index
     crashes = CountyCrash.where('_id.year' => params[:year]).all
     
     respond_to do |format|
