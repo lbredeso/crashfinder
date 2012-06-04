@@ -6,6 +6,7 @@ MnCrashFinder::Application.routes.draw do
       get 'map'
     end
     collection do
+      resources :states, :only => [:index]
       resources :counties, :only => [:index]
       resources :cities, :only => [:index]
     end

@@ -5,29 +5,66 @@
     var mapOptions = {
       // The center is in St. Paul at the moment.
       center: new google.maps.LatLng(45.954215, -93.089819),
-      zoom: 6,
+      zoom: 5,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     
-    $.ajax({
-      url: "#{counties_path}?year=2010",
-      dataType: 'json',
-      success: function(response) {
-        $.each(response, function(index, crashData) {
-          var crash = new google.maps.Marker({
-            position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
-            title: 'A crash'
-          });
-          crash.setMap(map);
-          
-          google.maps.event.addListener(crash, 'click', function() {
-            new google.maps.InfoWindow({
-              content: "<p>" + crashData.county + " county, " + crashData.year + "</p><p>" + crashData.count + " crashes</p>",
-              size: new google.maps.Size(50, 50)
-            }).open(map, crash);
-          });
-        })
+    var state = function(year) {
+      $.ajax({
+        url: "#{states_path}?year=" + year,
+        dataType: 'json',
+        success: function(response) {
+          $.each(response, function(index, crashData) {
+            var crash = new google.maps.Marker({
+              position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
+              title: 'A crash'
+            });
+            crash.setMap(map);
+            
+            google.maps.event.addListener(crash, 'click', function() {
+              new google.maps.InfoWindow({
+                content: "<p>" + crashData.year + "</p><p>" + crashData.count + " crashes</p>",
+                size: new google.maps.Size(50, 50)
+              }).open(map, crash);
+            });
+          })
+        }
+      });
+    };
+    
+    var county = function(year) {
+      $.ajax({
+        url: "#{counties_path}?year=" + year,
+        dataType: 'json',
+        success: function(response) {
+          $.each(response, function(index, crashData) {
+            var crash = new google.maps.Marker({
+              position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
+              title: 'A crash'
+            });
+            crash.setMap(map);
+            
+            google.maps.event.addListener(crash, 'click', function() {
+              new google.maps.InfoWindow({
+                content: "<p>" + crashData.county + " county, " + crashData.year + "</p><p>" + crashData.count + " crashes</p>",
+                size: new google.maps.Size(50, 50)
+              }).open(map, crash);
+            });
+          })
+        }
+      });
+    };
+    
+    // Default to state totals, zoomed out fairly far
+    state('2010');
+    
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+      var zoomLevel = map.getZoom();
+      if (zoomLevel <= 5) {
+        state('2010');
+      } else {
+        county('2010');
       }
     });
   });
