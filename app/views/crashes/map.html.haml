@@ -66,6 +66,30 @@
       });
     };
     
+    var city = function(year) {
+      $.ajax({
+        url: "#{cities_path}?year=" + year,
+        dataType: 'json',
+        success: function(response) {
+          clearMarkers();
+          $.each(response, function(index, crashData) {
+            var crash = new google.maps.Marker({
+              position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
+              map: map
+            });
+            markers.push(crash);
+            
+            google.maps.event.addListener(crash, 'click', function() {
+              new google.maps.InfoWindow({
+                content: "<p>" + crashData.city + ", " + crashData.year + "</p><p>" + crashData.count + " crashes</p>",
+                size: new google.maps.Size(50, 50)
+              }).open(map, crash);
+            });
+          })
+        }
+      });
+    };
+    
     // Default to state totals, zoomed out fairly far
     state('2010');
     
@@ -73,8 +97,10 @@
       var zoomLevel = map.getZoom();
       if (zoomLevel <= 5) {
         state('2010');
-      } else {
+      } else if (zoomLevel >= 6 && zoomLevel <= 8) {
         county('2010');
+      } else {
+        city('2010');
       }
     });
   });
