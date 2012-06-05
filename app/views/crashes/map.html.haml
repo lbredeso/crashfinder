@@ -10,17 +10,26 @@
     };
     var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
     
+    var markers = [];
+    var clearMarkers = function() {
+      $.each(markers, function(index, marker) {
+        marker.setMap(null);
+      });
+      markers = [];
+    };
+    
     var state = function(year) {
       $.ajax({
         url: "#{states_path}?year=" + year,
         dataType: 'json',
         success: function(response) {
+          clearMarkers();
           $.each(response, function(index, crashData) {
             var crash = new google.maps.Marker({
               position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
-              title: 'A crash'
+              map: map
             });
-            crash.setMap(map);
+            markers.push(crash);
             
             google.maps.event.addListener(crash, 'click', function() {
               new google.maps.InfoWindow({
@@ -38,12 +47,13 @@
         url: "#{counties_path}?year=" + year,
         dataType: 'json',
         success: function(response) {
+          clearMarkers();
           $.each(response, function(index, crashData) {
             var crash = new google.maps.Marker({
               position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
-              title: 'A crash'
+              map: map
             });
-            crash.setMap(map);
+            markers.push(crash);
             
             google.maps.event.addListener(crash, 'click', function() {
               new google.maps.InfoWindow({
