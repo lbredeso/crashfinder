@@ -18,9 +18,9 @@
       markers = [];
     };
     
-    var state = function(year) {
+    var processCrashes = function(args) {
       $.ajax({
-        url: "#{states_path}?year=" + year,
+        url: args.path + "?year=" + args.year,
         dataType: 'json',
         success: function(response) {
           clearMarkers();
@@ -33,59 +33,41 @@
             
             google.maps.event.addListener(crash, 'click', function() {
               new google.maps.InfoWindow({
-                content: "<p>" + crashData.year + "</p><p>" + crashData.count + " crashes</p>",
+                content: args.content(crashData),
                 size: new google.maps.Size(50, 50)
               }).open(map, crash);
             });
-          })
+          });
+        }
+      });
+    };
+    
+    var state = function(year) {
+      processCrashes({
+        path: "#{states_path}",
+        year: '2010',
+        content: function(crashData) {
+          return "<p>" + crashData.year + "</p><p>" + crashData.count + " crashes</p>";
         }
       });
     };
     
     var county = function(year) {
-      $.ajax({
-        url: "#{counties_path}?year=" + year,
-        dataType: 'json',
-        success: function(response) {
-          clearMarkers();
-          $.each(response, function(index, crashData) {
-            var crash = new google.maps.Marker({
-              position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
-              map: map
-            });
-            markers.push(crash);
-            
-            google.maps.event.addListener(crash, 'click', function() {
-              new google.maps.InfoWindow({
-                content: "<p>" + crashData.county + " county, " + crashData.year + "</p><p>" + crashData.count + " crashes</p>",
-                size: new google.maps.Size(50, 50)
-              }).open(map, crash);
-            });
-          })
+      processCrashes({
+        path: "#{counties_path}",
+        year: '2010',
+        content: function(crashData) {
+          return "<p>" + crashData.county + " county, " + crashData.year + "</p><p>" + crashData.count + " crashes</p>";
         }
       });
     };
     
     var city = function(year) {
-      $.ajax({
-        url: "#{cities_path}?year=" + year,
-        dataType: 'json',
-        success: function(response) {
-          clearMarkers();
-          $.each(response, function(index, crashData) {
-            var crash = new google.maps.Marker({
-              position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
-              map: map
-            });
-            markers.push(crash);
-            
-            google.maps.event.addListener(crash, 'click', function() {
-              new google.maps.InfoWindow({
-                content: "<p>" + crashData.city + ", " + crashData.year + "</p><p>" + crashData.count + " crashes</p>",
-                size: new google.maps.Size(50, 50)
-              }).open(map, crash);
-            });
-          })
+      processCrashes({
+        path: "#{cities_path}",
+        year: '2010',
+        content: function(crashData) {
+          return "<p>" + crashData.city + ", " + crashData.year + "</p><p>" + crashData.count + " crashes</p>";
         }
       });
     };
