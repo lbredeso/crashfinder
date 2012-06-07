@@ -74,4 +74,11 @@ class Crash
   key :city_township_name, String
   key :county_name
   
+  def as_json options = {}
+    {
+      year: self.year,
+      location: self.location
+    }
+  end
+  
 end

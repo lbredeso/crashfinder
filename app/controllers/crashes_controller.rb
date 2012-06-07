@@ -1,6 +1,16 @@
 class CrashesController < ApplicationController
   def index
-    crashes = Crash.where(:year => params[:year_id], :county => 62, :location => { '$exists' => true }).limit(100).all
+    box = [[params[:sw_lon].to_f, params[:sw_lat].to_f], [params[:ne_lon].to_f, params[:ne_lat].to_f]]
+    
+    crashes = Crash.where(
+      :year => params[:year],
+      :location => {
+        '$within' => {
+          '$box' => box
+        }
+      }
+    ).all
+    
     respond_to do |format|
       format.html
       format.json { render :json => crashes }

@@ -76,14 +76,27 @@
       });
     };
     
-    google.maps.event.addListener(map, 'bounds_changed', function() {
+    var all = function(year) {
+      processCrashes({
+        path: "#{crashes_path}",
+        year: year,
+        content: function(crashData) {
+          return "<p>" + crashData.year + "</p><p>" + crashData.location + "</p>";
+        }
+      });
+    };
+    
+    google.maps.event.addListener(map, 'idle', function() {
       var zoomLevel = map.getZoom();
+
       if (zoomLevel <= 5) {
         state('2010');
       } else if (zoomLevel >= 6 && zoomLevel <= 8) {
         county('2010');
-      } else {
+      } else if (zoomLevel >= 9 && zoomLevel <= 12){
         city('2010');
+      } else {
+        all('2010');
       }
     });
   });
