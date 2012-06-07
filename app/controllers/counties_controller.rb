@@ -1,6 +1,15 @@
 class CountiesController < ApplicationController
   def index
-    crashes = CountyCrash.where('_id.year' => params[:year]).all
+    box = [[params[:sw_lon].to_f, params[:sw_lat].to_f], [params[:ne_lon].to_f, params[:ne_lat].to_f]]
+    
+    crashes = CountyCrash.where(
+      '_id.year' => params[:year],
+      'value.location' => {
+        '$within' => {
+          '$box' => box
+        }
+      }
+    ).all
     
     respond_to do |format|
       format.html
