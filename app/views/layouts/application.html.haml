@@ -6,6 +6,6 @@
     = stylesheet_link_tag "application"
     = javascript_include_tag "application"
     = csrf_meta_tags
-    %script{:src => "http://maps.googleapis.com/maps/api/js?key=#{Rails.configuration.google_maps_api_key}&sensor=false", :type => "text/javascript"}
+    %script{:src => "http://maps.googleapis.com/maps/api/js?key=#{Rails.configuration.google_maps_api_key}&sensor=false&libraries=drawing", :type => "text/javascript"}
   %body
     = yield
