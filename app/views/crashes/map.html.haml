@@ -17,11 +17,14 @@
       map: map
     });
     
-    
     var markers = [];
+    var infoWindow;
+    var infoWindowMarker;
     var clearMarkers = function() {
       $.each(markers, function(index, marker) {
-        marker.setMap(null);
+        if (marker != infoWindowMarker) {
+          marker.setMap(null);
+        }
       });
       markers = [];
     };
@@ -48,10 +51,15 @@
               markers.push(crash);
               
               google.maps.event.addListener(crash, 'click', function() {
-                new google.maps.InfoWindow({
+                if (infoWindow) {
+                  infoWindow.close();
+                }
+                infoWindowMarker = crash;
+                infoWindow = new google.maps.InfoWindow({
                   content: args.content(crashData),
                   size: new google.maps.Size(50, 50)
-                }).open(map, crash);
+                });
+                infoWindow.open(map, crash);
               });
             });
           }
@@ -73,11 +81,16 @@
             map: map
           });
           markers.push(crash);
-                
-          new google.maps.InfoWindow({
+          
+          if (infoWindow) {
+            infoWindow.close();
+          }
+          infoWindowMarker = crash;
+          infoWindow = new google.maps.InfoWindow({
             content: "<p>" + '2010' + "</p><p>" + response.length + " crashes</p>",
             size: new google.maps.Size(50, 50)
-          }).open(map, crash);
+          })
+          infoWindow.open(map, crash);
         }
       });
     });
