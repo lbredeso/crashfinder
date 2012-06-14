@@ -1,0 +1,35 @@
+#!/bin/bash
+
+. "${OPENSHIFT_REPO_DIR}.openshift/config"
+
+JRUBY_PATH="jruby-$VERSION"
+JRUBY_ARCH="jruby-bin-$VERSION.tar.gz"
+
+cd $OPENSHIFT_DATA_DIR
+
+if [[ -d $JRUBY_PATH ]]; then
+	echo "JRuby already installed."
+else
+
+	for version in jruby-*; do 
+		echo "Removing $version"
+		rm -rf $version 
+	done
+
+	if [[ -e "Gemfile.hsh" ]]; then
+		echo "Removing Gemfile hash"
+		rm "Gemfile.hsh"
+	fi
+
+	echo "Installing JRuby $VERSION"
+
+	curl -o $JRUBY_ARCH "http://jruby.org.s3.amazonaws.com/downloads/$VERSION/jruby-bin-$VERSION.tar.gz"
+	tar -xf $JRUBY_ARCH
+	rm $JRUBY_ARCH
+
+	PATH="${OPENSHIFT_DATA_DIR}jruby-$VERSION/bin:$PATH"
+
+	jruby -S gem install bundler
+	jruby -S gem install trinidad
+
+fi

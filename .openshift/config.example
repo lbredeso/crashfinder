@@ -1,0 +1,3 @@
+VERSION=1.6.7
+RACK_ENV=production
+USE_ORACLE_JDK="I agree with Oracle's license terms"

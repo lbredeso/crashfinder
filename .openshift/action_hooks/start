@@ -1,0 +1,35 @@
+#!/bin/bash
+
+cd $OPENSHIFT_REPO_DIR
+
+. ".openshift/config"
+
+PATH="${OPENSHIFT_DATA_DIR}jruby-$VERSION/bin:$PATH"
+
+if [[ -e Gemfile ]]; then
+	ahash=`sha1sum Gemfile`
+	if [[ -e "${OPENSHIFT_DATA_DIR}Gemfile.hsh" ]]; then
+		ohash=`cat ${OPENSHIFT_DATA_DIR}Gemfile.hsh`
+	else
+		ohash=''
+	fi
+
+	if [[ "$ahash" == "$ohash" ]]; then
+		echo "No change in Gemfile"
+	else
+		jruby -S bundle install
+		echo "$ahash" > ${OPENSHIFT_DATA_DIR}Gemfile.hsh
+	fi
+fi
+
+echo "Starting JRuby application!"
+
+if [[ -e config.rb ]]; then
+	nohup bash -c "exec 'jruby' '--1.9' 'config.rb' &> ${OPENSHIFT_LOG_DIR}jruby.log" &> /dev/null &
+	echo $! > .openshift/application.pid
+elif [[ -e config.ru ]]; then
+	nohup bash -c "exec 'jruby' '--1.9' '-S' 'trinidad' '-p' '$OPENSHIFT_INTERNAL_PORT' '--address' '$OPENSHIFT_INTERNAL_IP' '-e' '$RACK_ENV' &> ${OPENSHIFT_LOG_DIR}jruby.log"  &> /dev/null &
+	echo $! > .openshift/application.pid
+else
+	echo "Do not know what to do!"
+fi
