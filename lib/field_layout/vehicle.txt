@@ -1,4 +1,4 @@
-@1   ACCN     Z9.0                                          
+@62  ACCN     $13.                                          
 @46  ACTION   Z2.0                                          
 @58  CARGOTP  Z2.0                                          
 @42  CFCT1    Z2.0                                          

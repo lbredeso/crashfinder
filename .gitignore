@@ -7,3 +7,5 @@ bin/
 .redcar
 lib/data/*
 .rspec
+.DS_Store
+lib/.DS_Store

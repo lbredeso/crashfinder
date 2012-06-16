@@ -16,7 +16,7 @@ namespace :crashes do
     File.open(year_file).each_line do |line|
       crash = {}
       data = line.unpack layout[:pattern]
-      puts "Loading #{year} crash for accn #{data[0]}"
+      puts "Loading #{year} crash for accn #{data[1]}"
       
       layout[:fields].each_with_index do |field, index|
         converter = case layout[:field_types][field.name]
@@ -56,42 +56,24 @@ namespace :crashes do
     Crash.collection.insert crashes
   end
   
-  desc "Find, report, and remove duplicate crashes"
-  task :remove_duplicates => :environment do
-    duplicates_gone = false
-    until duplicates_gone
-      begin
-        Crash.create_index([['accn', Mongo::ASCENDING]], :unique => true)
-        duplicates_gone = true
-      rescue Mongo::OperationFailure => e
-        e.to_s.match /dup key: { : ([0-9]{8,10}) }/
-        puts "Found duplicate accn: #{$1}"
-        Crash.find_all_by_accn($1.to_i).each do |crash|
-          puts "Deleting duplicate accn: #{$1}, accdate: #{crash.accdate}"
-          crash.delete
-        end
-      end
-    end
-  end
-  
   desc "Generate location file"
   task :generate_location_file, [:year] => :environment do |t, args|
     year = args.year
-    last_page = Crash.count(:year => year, :locrel => [1, 2, 3]) / BATCH_SIZE + 1
+    last_page = Crash.count(:year => year, :locrel => ['1', '2', '3']) / BATCH_SIZE + 1
     puts "Generating crash location file for #{year}"
     CSV.open("mn-#{year}-loc.csv", "wb") do |csv|
       current_page = 1
       until current_page > last_page
         crashes = Crash.paginate({
           :year => year,
-          :locrel => [1, 2, 3],
+          :locrel => ['1', '2', '3'],
           :order => :accn,
           :per_page => BATCH_SIZE,
           :page => current_page
         })
         crashes.each do |crash|
           # When the rtnumber ends in 8888 or 9999, it is invalid.  This can happen when it is
-          # known which road the crash occurred, just not precisely where on that road.
+          # known which road the crash occurred on, just not precisely where on that road.
           if crash.rtnumber !~ /9999$/ and crash.rtnumber !~ /8888$/
             csv << [crash.accn, crash.route_id, crash.mile_point]
           end
@@ -111,6 +93,18 @@ namespace :crashes do
       crash.update_attributes :location => [row[1].to_f, row[2].to_f]
     end
   end
+  
+  desc "Build crash map reduce collections"
+  task :map_reduce => :environment do
+    puts "Creating state_crashes collection..."
+    StateCrash.build
+    
+    puts "Creating county_crashes collection..."
+    CountyCrash.build
+    
+    puts "Creating city_crashes collection..."
+    CityCrash.build
+  end
 end
 
 namespace :vehicles do
@@ -123,7 +117,7 @@ namespace :vehicles do
     vehicles = []
     File.open(year_file).each_line do |line|
       data = line.unpack layout[:pattern]
-      puts "Loading #{year} vehicle for accn #{data[0]}"
+      puts "Loading #{year} vehicle for accn #{data[1]}"
       vehicle = Vehicle.new
       
       layout[:fields].each_with_index do |field, index|
@@ -155,7 +149,7 @@ namespace :people do
     people = []
     File.open(year_file).each_line do |line|
       data = line.unpack layout[:pattern]
-      puts "Loading #{year} person for accn #{data[0]}"
+      puts "Loading #{year} person for accn #{data[1]}"
       person = Person.new
       
       layout[:fields].each_with_index do |field, index|

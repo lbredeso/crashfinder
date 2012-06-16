@@ -1,0 +1,33 @@
+== Minnesota Crash Finder
+
+This project aims to aid public understanding of crash data in the state of Minnesota.
+
+== Getting Started
+
+1. Install, then start MongoDB
+
+2. Load seed data
+
+    rake db:seed
+
+3. Load crash data for any years you wish
+    
+    rake crashes:load[2011]
+
+4. Add indexes
+
+    rake db:index
+    
+5. Generate location file
+
+    rake crashes:generate_location_file[2011]
+    
+6. Use mn_location_finder to convert these locations to a latitude/longitude file
+    
+7. Load the converted latitude/longitude location file back in
+
+    rake crashes:update_locations[mn-2011-locations.csv]
+    
+6. Run Map Reduce jobs
+
+    rake crashes:map_reduce

@@ -1,11 +1,10 @@
 @46    ACCDATE  MMDDYY10. 
 @45    ACCDAY   Z1.0                                    
-@1     ACCN     Z9.0     
+@6     ACCN     $13.     
 @179   ACCSEV   $1.                                           
 @56    ACCTIM2  $4.                                           
-@92    ACCTYPE  Z2.0
-@149   ACMONTH  Z1.0                                        
-@10    AGENCY   $4.                                           
+@92    ACCTYPE  Z2.0                                         
+@1     AGENCY   $4.                                           
 @98    BRIDGE   $1.                                                                                      
 @63    CITY     $4.                                           
 @62    CIORTO   $1.                                           
@@ -21,7 +20,7 @@
 @101   LOCWZ    Z2.0                                          
 @41    NUMFAT   Z2.0                                          
 @43    NUMINJ   Z2.0                                          
-@39    NUMMV    $2.0                                          
+@39    NUMMV    Z2.0                                          
 @127   OFFICER  Z2.0                                          
 @151   ONLINE   $1.                                           
 @180   PATSTA   Z4.0                                          
@@ -43,7 +42,7 @@
 @110   TRFCNTL  Z2.0                                          
 @171   TRUEM1   $3.                                           
 @174   TRUEM2   $2.                                           
-@176   TRUEM3   $3.0                                          
+@176   TRUEM3   $3.                                          
 @194   URBCAT   Z1.0                                          
 @193   URBRURT  Z1.0                                          
 @118   WEATHER  Z2.0                                          

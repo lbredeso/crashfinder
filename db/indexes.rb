@@ -6,3 +6,4 @@ CountyCrash.ensure_index '_id.year'
 CountyCrash.ensure_index [['value.location', '2d'], ['_id.year', 1]]
 CityCrash.ensure_index '_id.year'
 CityCrash.ensure_index [['value.location', '2d'], ['_id.year', 1]]
+Crash.ensure_index [[:locrel, 1], [:year, 1]]
