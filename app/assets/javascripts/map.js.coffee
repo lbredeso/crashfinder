@@ -63,7 +63,7 @@ jQuery ->
     northEast = rectangle.getBounds().getNorthEast()
     processCrashes({
       path: '/crashes',
-      year: '2010',
+      year: '2011',
       southWest: southWest,
       northEast: northEast,
       callback: (response) =>
@@ -76,7 +76,7 @@ jQuery ->
         @infoWindow?.close()
         @infoWindowMarker = crash
         @infoWindow = new google.maps.InfoWindow({
-          content: "<p>" + '2010' + "</p><p>" + response.length + " crashes</p>",
+          content: "<p>" + '2011' + "</p><p>" + response.length + " crashes</p>",
           size: new google.maps.Size(50, 50)
         })
         @infoWindow.open @map, crash
@@ -89,28 +89,28 @@ jQuery ->
     if zoomLevel <= 5
       processCrashes({
         path: '/crashes/states',
-        year: '2010',
+        year: '2011',
         content: (crashData) ->
           "<p>" + crashData.year + "</p><p>" + crashData.count + " crashes</p>"
       })
     else if zoomLevel >= 6 && zoomLevel <= 8
       processCrashes({
         path: '/crashes/counties',
-        year: '2010',
+        year: '2011',
         content: (crashData) ->
           "<p>" + crashData.county + " county, " + crashData.year + "</p><p>" + crashData.count + " crashes</p>"
       })
     else if zoomLevel >= 9 && zoomLevel <= 12
       processCrashes({
         path: '/crashes/cities',
-        year: '2010',
+        year: '2011',
         content: (crashData) ->
           "<p>" + crashData.city + ", " + crashData.year + "</p><p>" + crashData.count + " crashes</p>"
       })
     else
       processCrashes({
         path: '/crashes',
-        year: '2010',
+        year: '2011',
         content: (crashData) ->
           "<p>" + crashData.year + "</p><p>" + crashData.location + "</p>"
       })
