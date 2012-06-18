@@ -117,7 +117,6 @@ namespace :vehicles do
     vehicles = []
     File.open(year_file).each_line do |line|
       data = line.unpack layout[:pattern]
-      puts "Loading #{year} vehicle for accn #{data[1]}"
       vehicle = Vehicle.new
       
       layout[:fields].each_with_index do |field, index|
@@ -127,6 +126,7 @@ namespace :vehicles do
         end
         vehicle.send "#{field.name}=", data[index].send(converter)
       end
+      puts "Loading #{year} vehicle for accn #{vehicle.accn}"
       vehicles << vehicle
       if vehicles.size % BATCH_SIZE == 0
         puts "Saving..."
@@ -147,9 +147,9 @@ namespace :people do
     puts "Loading person data for #{year}"
     year_file = File.join Rails.root, "lib", "data", "person", "mn-#{year}-per.txt"
     people = []
+    Crash.collection.update({ :year => year }, { '$unset' => { 'people' => 1 } }, :upsert => false, :multi => true)
     File.open(year_file).each_line do |line|
       data = line.unpack layout[:pattern]
-      puts "Loading #{year} person for accn #{data[1]}"
       person = Person.new
       
       layout[:fields].each_with_index do |field, index|
@@ -159,6 +159,7 @@ namespace :people do
         end
         person.send "#{field.name}=", data[index].send(converter)
       end
+      puts "Loading #{year} person for accn #{person.accn}"
       people << person
       if people.size % BATCH_SIZE == 0
         puts "Saving..."
@@ -198,7 +199,11 @@ def bulk_save type, things
     crashes
   end
   things.each do |thing|
-    crashes[thing.accn].send(type.to_s.downcase.pluralize) << thing
+    if crashes[thing.accn]
+      crashes[thing.accn].send(type.to_s.downcase.pluralize) << thing
+    else
+      puts "Crash #{thing.accn} not found!  Better investigate..."
+    end
   end
   crashes.values.each do |crash|
     crash.save
