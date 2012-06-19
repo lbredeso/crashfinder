@@ -17,6 +17,8 @@ end
 gem 'pry'	  	
 gem 'pry-rails'
 gem 'jquery-rails'
+gem 'twitter-bootstrap-rails'
+gem 'haml-rails'
 
 # Use unicorn as the web server  	
 # gem 'unicorn'
