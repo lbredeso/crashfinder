@@ -1,7 +1,9 @@
 class Person
   include MongoMapper::EmbeddedDocument
   
-  key :accn, String
+  # No point saving this, since it's already embedded in the crash
+  attr_accessor :accn
+  
   key :addcor, String
   key :airbag, Integer
   key :age, Integer

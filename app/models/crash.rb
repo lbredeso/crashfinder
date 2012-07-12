@@ -7,7 +7,6 @@ class Crash
   # DPS fields
   key :accdate, String
   key :accday, String
-  key :accn, String
   key :accsev, String
   key :acctim2, String
   key :acctype, String

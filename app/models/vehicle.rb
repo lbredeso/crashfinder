@@ -1,7 +1,9 @@
 class Vehicle
   include MongoMapper::EmbeddedDocument
   
-  key :accn, String
+  # No point saving this, since it's already embedded in the crash
+  attr_accessor :accn
+  
   key :action, Integer
   key :cargotp, Integer
   key :cfct1, Integer

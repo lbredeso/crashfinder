@@ -20,8 +20,9 @@ namespace :crashes do
       
       layout[:fields].each_with_index do |field, index|
         converter = case layout[:field_types][field.name]
-        when "Integer" then "to_i"
-        when "String" then "to_s"
+          when "Integer" then "to_i"
+          when "String" then "to_s"
+          else "to_s"
         end
         crash[field.name.intern] = data[index].send(converter)
         if code_map[field.name]
@@ -121,8 +122,9 @@ namespace :vehicles do
       
       layout[:fields].each_with_index do |field, index|
         converter = case layout[:field_types][field.name]
-        when "Integer" then "to_i"
-        when "String" then "to_s"
+          when "Integer" then "to_i"
+          when "String" then "to_s"
+          else "to_s"
         end
         vehicle.send "#{field.name}=", data[index].send(converter)
       end
@@ -154,8 +156,9 @@ namespace :people do
       
       layout[:fields].each_with_index do |field, index|
         converter = case layout[:field_types][field.name]
-        when "Integer" then "to_i"
-        when "String" then "to_s"
+          when "Integer" then "to_i"
+          when "String" then "to_s"
+          else "to_s"
         end
         person.send "#{field.name}=", data[index].send(converter)
       end
@@ -193,9 +196,9 @@ def process_layout type, pattern
 end
 
 def bulk_save type, things
-  accns = Set.new(things.map { |v| v.accn }).to_a
-  crashes = Crash.where(:accn => accns).all.inject({}) do |crashes, crash|
-    crashes[crash.accn] = crash
+  accns = Set.new(things.map { |t| t.accn }).to_a
+  crashes = Crash.where(:id => accns).all.inject({}) do |crashes, crash|
+    crashes[crash.id] = crash
     crashes
   end
   things.each do |thing|

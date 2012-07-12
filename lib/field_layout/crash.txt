@@ -1,6 +1,6 @@
 @46    ACCDATE  MMDDYY10. 
 @45    ACCDAY   Z1.0                                    
-@6     ACCN     $13.     
+@6     _ID      $13.     
 @179   ACCSEV   $1.                                           
 @56    ACCTIM2  $4.                                           
 @92    ACCTYPE  Z2.0                                         
