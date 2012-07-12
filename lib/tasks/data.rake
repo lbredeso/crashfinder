@@ -6,55 +6,60 @@ BATCH_SIZE = 1000
 
 namespace :crashes do
   desc "Load crash data"
-  task :load, [:year] => :environment do |t, args|
-    year = args.year
-    layout = process_layout Crash, "A7A9A9"
-    puts "Loading crash data for #{year}"
-    year_file = File.join Rails.root, "lib", "data", "crash", "mn-#{year}-acc.txt"
-    crashes = []
-    code_map = Code.map
-    File.open(year_file).each_line do |line|
-      crash = {}
-      data = line.unpack layout[:pattern]
-      puts "Loading #{year} crash for accn #{data[1]}"
-      
-      layout[:fields].each_with_index do |field, index|
-        converter = case layout[:field_types][field.name]
-          when "Integer" then "to_i"
-          when "String" then "to_s"
-          else "to_s"
+  task :load, [:start_year, :end_year] => :environment do |t, args|
+    start_year = args.start_year.to_i
+    end_year = args.end_year ? args.end_year.to_i : start_year
+    (start_year..end_year).each do |year|
+      layout = process_layout Crash, "A7A9A9"
+      puts "Loading crash data for #{year}"
+      year_file = File.join Rails.root, "lib", "data", "crash", "mn-#{year}-acc.txt"
+      crashes = []
+      code_map = Code.map
+      File.open(year_file).each_line do |line|
+        crash = {}
+        data = line.unpack layout[:pattern]
+        puts "Loading #{year} crash for accn #{data[1]}"
+        
+        layout[:fields].each_with_index do |field, index|
+          converter = case layout[:field_types][field.name]
+            when "Integer" then "to_i"
+            when "String" then "to_s"
+            else "to_s"
+          end
+          if Crash::ACTIVE.include? field.name.intern
+            crash[field.name.intern] = data[index].send(converter)
+            if code_map[field.name]
+              crash["#{field.name}_name"] = code_map[field.name][crash[field.name.intern]]
+            end
+          end
         end
-        crash[field.name.intern] = data[index].send(converter)
-        if code_map[field.name]
-          crash["#{field.name}_name"] = code_map[field.name][crash[field.name.intern]]
+        crash[:route_id] = crash[:rtsys][1..2] + pad_rtnumber(crash[:rtnumber])
+        crash[:mile_point] = "#{crash[:truem1]}.#{crash[:truem3]}".to_f
+        crash[:accdate] =~ /([\d]{2})\/([\d]{2})\/([\d]{4})/
+        crash[:month] = $1
+        crash[:day] = $2
+        crash[:year] = $3
+        crash[:weekday] = Date.strptime(crash[:accdate], "%m/%d/%Y").strftime("%A")
+        
+        # Townships are a weird case, as they are uniquely identified by county + township code
+        # They also are thrown in with the city code, in cases where the city isn't known (e.g. rural crashes).
+        crash[:city_township] = if crash[:city].size == 3
+          "#{crash[:county]}#{crash[:city]}"
+        else
+          crash[:city]
+        end
+        crash[:city_township_name] = code_map['city_township'][crash[:city_township]]
+        
+        crashes << crash
+        if crashes.size % BATCH_SIZE == 0
+          puts "Saving..."
+          Crash.collection.insert crashes
+          crashes = []
         end
       end
-      crash[:route_id] = crash[:rtsys][1..2] + pad_rtnumber(crash[:rtnumber])
-      crash[:mile_point] = "#{crash[:truem1]}.#{crash[:truem3]}".to_f
-      crash[:accdate] =~ /([\d]{2})\/([\d]{2})\/([\d]{4})/
-      crash[:month] = $1
-      crash[:day] = $2
-      crash[:year] = $3
-      crash[:weekday] = Date.strptime(crash[:accdate], "%m/%d/%Y").strftime("%A")
-      
-      # Townships are a weird case, as they are uniquely identified by county + township code
-      # They also are thrown in with the city code, in cases where the city isn't known (e.g. rural crashes).
-      crash[:city_township] = if crash[:city].size == 3
-        "#{crash[:county]}#{crash[:city]}"
-      else
-        crash[:city]
-      end
-      crash[:city_township_name] = code_map['city_township'][crash[:city_township]]
-      
-      crashes << crash
-      if crashes.size % BATCH_SIZE == 0
-        puts "Saving..."
-        Crash.collection.insert crashes
-        crashes = []
-      end
+      puts "Saving..."
+      Crash.collection.insert crashes
     end
-    puts "Saving..."
-    Crash.collection.insert crashes
   end
   
   desc "Generate location file"
@@ -89,8 +94,8 @@ namespace :crashes do
     file = args.file
     puts "Updating locations from #{file}"
     CSV.foreach("lib/data/location/#{file}") do |row|
-      crash = Crash.find_by_accn(row[0])
-      puts "Update crash location for accn #{crash.accn}"
+      crash = Crash.find row[0]
+      puts "Update crash location for accn #{crash.id}"
       crash.update_attributes :location => [row[1].to_f, row[2].to_f]
     end
   end
@@ -126,7 +131,9 @@ namespace :vehicles do
           when "String" then "to_s"
           else "to_s"
         end
-        vehicle.send "#{field.name}=", data[index].send(converter)
+        if Vehicle::ACTIVE.include? field.name.intern
+          vehicle.send "#{field.name}=", data[index].send(converter)
+        end
       end
       puts "Loading #{year} vehicle for accn #{vehicle.accn}"
       vehicles << vehicle
@@ -160,7 +167,9 @@ namespace :people do
           when "String" then "to_s"
           else "to_s"
         end
-        person.send "#{field.name}=", data[index].send(converter)
+        if Person::ACTIVE.include? field.name.intern
+          person.send "#{field.name}=", data[index].send(converter)
+        end
       end
       puts "Loading #{year} person for accn #{person.accn}"
       people << person

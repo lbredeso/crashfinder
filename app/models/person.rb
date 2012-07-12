@@ -1,6 +1,8 @@
 class Person
   include MongoMapper::EmbeddedDocument
   
+  ACTIVE = [:accn, :age, :eject, :sex]
+  
   # No point saving this, since it's already embedded in the crash
   attr_accessor :accn
   

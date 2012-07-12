@@ -1,6 +1,8 @@
 class Crash
   include MongoMapper::Document
   
+  ACTIVE = [:_id, :accdate, :city, :city_township, :city_township_name, :county, :county_name, :day, :location, :locrel, :mile_point, :month, :route_id, :rtnumber, :rtsys, :weekday, :year]
+  
   many :people
   many :vehicles
   
