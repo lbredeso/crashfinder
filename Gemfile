@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'rails', '~> 3.2.0'
   	
 gem 'mongo_mapper', '0.11.0'	
-gem 'bson_ext'	  	
+gem 'bson_ext', :platforms => :ruby	
 gem 'haml'
  	
 # Gems used only for assets and not required	  	
@@ -17,7 +17,7 @@ end
 gem 'pry'	  	
 gem 'pry-rails'
 gem 'jquery-rails'
-gem 'twitter-bootstrap-rails'
+gem 'twitter-bootstrap-rails', :github => 'seyhunak/twitter-bootstrap-rails'
 gem 'haml-rails'
 
 # Use unicorn as the web server  	

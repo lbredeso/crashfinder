@@ -82,4 +82,11 @@ class Crash
     }
   end
   
+  def lng
+    location[0]
+  end
+  
+  def lat
+    location[1]
+  end
 end
