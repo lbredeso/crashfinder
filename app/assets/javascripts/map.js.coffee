@@ -63,9 +63,8 @@ jQuery ->
     southWest = rectangle.getBounds().getSouthWest()
     northEast = rectangle.getBounds().getNorthEast()
     processCrashes({
-      path: '/crashes/clusters',
-      year: '2011',
-      zoomLevel: zoomLevel,
+      path: '/crashes',
+      year: '2011', 
       southWest: southWest,
       northEast: northEast,
       callback: (response) =>
