@@ -14,7 +14,7 @@ class CrashCluster
     crashes = Crash.where({'year' => year, 'location' => { '$exists' => true }}).sort(:location).all
     (5..15).each do |zoom|
       puts "Building #{year} cluster at zoom #{zoom}..."
-      clusters = Cluster.new.find_by crashes, 10, zoom
+      clusters = Cluster.new.find_by crashes, 20, zoom
       clusters.each do |cluster|
         crash_cluster = CrashCluster.new year: year, count: cluster.size, zoom: zoom
         crash_cluster.location = [
@@ -24,5 +24,14 @@ class CrashCluster
         crash_cluster.save
       end
     end
+  end
+  
+  def as_json options = {}
+    {
+      city: 'TBD',
+      year: self.year,
+      count: self.count,
+      location: self.location
+    }
   end
 end

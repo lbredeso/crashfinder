@@ -9,6 +9,7 @@ MnCrashFinder::Application.routes.draw do
       resources :states, :only => [:index]
       resources :counties, :only => [:index]
       resources :cities, :only => [:index]
+      resources :clusters, :only => [:index]
     end
   end
 

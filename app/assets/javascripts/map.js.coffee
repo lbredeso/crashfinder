@@ -30,7 +30,7 @@ jQuery ->
     ne = args.northEast || @map.getBounds().getNorthEast()
   
     $.ajax({
-      url: args.path + "?year=" + args.year + 
+      url: args.path + "?year=" + args.year + "&zoom=" + args.zoom +
         "&sw_lat=" + sw.lat() + "&sw_lon=" + sw.lng() + "&ne_lat=" + ne.lat() + "&ne_lon=" + ne.lng(),
       dataType: 'json',
       success: (response) =>
@@ -42,7 +42,8 @@ jQuery ->
           $.each(response, (index, crashData) =>
             crash = new google.maps.Marker({
               position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
-              map: @map
+              map: @map,
+              icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + crashData.count + "|FF0000|FFFFFF"
             })
             @markers.push crash
             
@@ -62,14 +63,16 @@ jQuery ->
     southWest = rectangle.getBounds().getSouthWest()
     northEast = rectangle.getBounds().getNorthEast()
     processCrashes({
-      path: '/crashes',
+      path: '/crashes/clusters',
       year: '2011',
+      zoomLevel: zoomLevel,
       southWest: southWest,
       northEast: northEast,
       callback: (response) =>
         crash = new google.maps.Marker({
           position: new google.maps.LatLng((southWest.lat() + northEast.lat()) / 2, (southWest.lng() + northEast.lng()) / 2),
-          map: @map
+          map: @map,
+          icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + response.count + "|FF0000|000000"
         })
         @markers.push crash
         
@@ -84,34 +87,12 @@ jQuery ->
   )
   
   google.maps.event.addListener(@map, 'idle', =>
-    zoomLevel = @map.getZoom()
-
-    if zoomLevel <= 5
-      processCrashes({
-        path: '/crashes/states',
-        year: '2011',
-        content: (crashData) ->
-          "<p>" + crashData.year + "</p><p>" + crashData.count + " crashes</p>"
-      })
-    else if zoomLevel >= 6 && zoomLevel <= 8
-      processCrashes({
-        path: '/crashes/counties',
-        year: '2011',
-        content: (crashData) ->
-          "<p>" + crashData.county + " county, " + crashData.year + "</p><p>" + crashData.count + " crashes</p>"
-      })
-    else if zoomLevel >= 9 && zoomLevel <= 12
-      processCrashes({
-        path: '/crashes/cities',
-        year: '2011',
-        content: (crashData) ->
-          "<p>" + crashData.city + ", " + crashData.year + "</p><p>" + crashData.count + " crashes</p>"
-      })
-    else
-      processCrashes({
-        path: '/crashes',
-        year: '2011',
-        content: (crashData) ->
-          "<p>" + crashData.year + "</p><p>" + crashData.location + "</p>"
-      })
+    zoom = @map.getZoom()
+    processCrashes({
+      path: '/crashes/clusters',
+      year: '2011',
+      zoom: zoom,
+      content: (crashData) ->
+        "<p>" + crashData.year + "</p><p>" + crashData.count + "</p>"
+    })
   )
