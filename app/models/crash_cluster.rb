@@ -11,14 +11,11 @@ class CrashCluster
   def self.build year
     CrashCluster.collection.drop()
     puts "Fetching located crashes that occurred in #{year}..."
-    crashes = Crash.where({'year' => year, 'location' => { '$exists' => true }}).all
-    singles = []
+    crashes = Crash.where({'year' => year, 'location' => { '$exists' => true }}).sort(:location).all
     (5..15).each do |zoom|
       puts "Building #{year} cluster at zoom #{zoom}..."
-      cluster = Cluster.new.find_by crashes, singles, 10, zoom
-      clusters = cluster[:data]
-      singles = cluster[:singles]
-      (clusters + singles.map { |s| [s] }).each do |cluster|
+      clusters = Cluster.new.find_by crashes, 10, zoom
+      clusters.each do |cluster|
         crash_cluster = CrashCluster.new year: year, count: cluster.size, zoom: zoom
         crash_cluster.location = [
           cluster.map { |c| c.location[0] }.inject(0) { |sum, longitude| sum + longitude } / cluster.size,
