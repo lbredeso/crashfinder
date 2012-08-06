@@ -26,6 +26,16 @@ $(function() {
     markers = [];
   };
   
+  var findMaxCrashCount = function(crashes) {
+    var max = 0;
+    $.each(crashes, function(index, crash) {
+      if (crash.count > max) {
+        max = crash.count;
+      }
+    })
+    return max;
+  };
+  
   var processCrashes = function(args) {
     var sw = args.southWest || map.getBounds().getSouthWest();
     var ne = args.northEast || map.getBounds().getNorthEast();
@@ -40,11 +50,13 @@ $(function() {
         if (args.callback) {
           args.callback(response);
         } else {
+          var maxCrashCount = findMaxCrashCount(response);
+          var color = Color.generate(maxCrashCount);
           $.each(response, function(index, crashData) {
             var crash = new google.maps.Marker({
               position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
               map: map,
-              icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + crashData.count + "|FF0000|FFFFFF"
+              icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|" + color.toHex(crashData.count) + "|FFFFFF"
             });
             markers.push(crash);
             
