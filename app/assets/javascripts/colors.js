@@ -1,7 +1,7 @@
 var Color = Color || {
   generate: function(maxCount) {
     var red = 255;
-    var step = Math.floor(maxCount / 255);
+    var step = maxCount / 255;
     var ranges = [];
     var range = function(min, max) {
       return {
@@ -13,29 +13,28 @@ var Color = Color || {
           }
         },
         
-        green: function() {
+        color: function() {
           // The color space has to be adjusted here to avoid things being too white
-          return 175 - (max / step);
-        },
-        
-        blue: function() {
-          // The color space has to be adjusted here to avoid things being too white
-          return 175 - (max / step);
+          if (maxCount > 255) {
+            return 255 - Math.floor(min / step);
+          } else {
+            return 255 - Math.floor(255 * (min / maxCount));
+          }
         }
       }
     }
     
-    for (var i = 1; i <= maxCount; i += step + 1) {
-      ranges.push(range(i, i + step));
+    var offset = 0.00000001;
+    for (var i = 0; i < 255; i++) {
+      ranges.push(range(i * step + offset, (i + 1) * step));
     }
     
     return {
       toHex: function(value) {
         for (var r in ranges) {
-          var something = ranges;
           if (ranges[r].encapsulates(value)) {
-            var rgb = ranges[r].blue() | (ranges[r].green() << 8) | (red << 16);
-            return rgb.toString(16);
+            var color = ranges[r].color();
+            return ((1 << 24) + (red << 16) + (color << 8) + color).toString(16).slice(1);
           }
         }
       }
