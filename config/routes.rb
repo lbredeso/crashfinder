@@ -1,4 +1,4 @@
-MnCrashFinder::Application.routes.draw do
+Crashfinder::Application.routes.draw do
   root :to => 'crashes#map'
   
   resources :crashes, :only => [:index, :show] do

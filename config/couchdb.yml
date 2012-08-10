@@ -1,8 +1,0 @@
-development:
-  protocol: 'http'
-  host: localhost
-  port: 5984
-  prefix: mn_crash_finder
-  suffix: development
-  # username: test
-  # password: user

@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-MnCrashFinder::Application.load_tasks
+Crashfinder::Application.load_tasks

@@ -4,15 +4,15 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: mn_crash_finder_development
+  database: crashfinder_development
 
 test:
   <<: *defaults
-  database: mn_crash_finder_test
+  database: crashfinder_test
 
 # set these environment variables on your prod server
 production:
   <<: *defaults
-  database: mn_crash_finder
+  database: crashfinder
   username: <%= ENV['MONGO_USERNAME'] %>
   password: <%= ENV['MONGO_PASSWORD'] %>

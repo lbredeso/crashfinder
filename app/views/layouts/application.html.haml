@@ -3,7 +3,7 @@
   %head
     %meta(charset="utf-8")
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    %title= content_for?(:title) ? yield(:title) : "Minnesota Crash Finder"
+    %title= content_for?(:title) ? yield(:title) : "Crash Finder"
     = csrf_meta_tags
     %script{:src => "http://maps.googleapis.com/maps/api/js?key=#{Rails.configuration.google_maps_api_key}&sensor=false&libraries=drawing", :type => "text/javascript"}
     / Le HTML5 shim, for IE6-8 support of HTML elements
@@ -23,7 +23,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand(href="#") Minnesota Crash Finder
+          %a.brand(href="#") Crash Finder
           .container.nav-collapse
             %ul.nav
               %li= link_to "Trends", "/path1"

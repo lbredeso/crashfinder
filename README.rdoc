@@ -1,6 +1,6 @@
-== Minnesota Crash Finder
+==Crash Finder
 
-This project aims to aid public understanding of crash data in the state of Minnesota.
+This project aims to aid public understanding of crash data, starting in the state of Minnesota.
 
 == Getting Started
 
