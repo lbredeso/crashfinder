@@ -44,6 +44,7 @@ GEM
     bson (1.5.2)
     bson (1.5.2-java)
     builder (3.0.0)
+    closure-compiler (1.1.7)
     coderay (1.0.5)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -172,15 +173,13 @@ GEM
     turn (0.8.3)
       ansi
     tzinfo (0.3.31)
-    uglifier (1.0.3)
-      execjs (>= 0.3.0)
-      multi_json (>= 1.0.2)
 
 PLATFORMS
   java
   ruby
 
 DEPENDENCIES
+  closure-compiler
   coffee-rails (~> 3.2.0)
   factory_girl
   haml
@@ -197,4 +196,3 @@ DEPENDENCIES
   trinidad
   turn
   twitter-bootstrap-rails!
-  uglifier

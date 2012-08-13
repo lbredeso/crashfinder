@@ -2,8 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '~> 3.2.0'
   	
-gem 'mongo_mapper', '0.11.0'	
-#gem 'bson_ext'
+gem 'mongo_mapper', '0.11.0'
 gem 'haml'
  	
 # Gems used only for assets and not required	  	
@@ -11,7 +10,7 @@ gem 'haml'
 group :assets do
   gem 'sass-rails', "  ~> 3.2.0"	  	
   gem 'coffee-rails', "~> 3.2.0" 	
-  gem 'uglifier'
+  gem 'closure-compiler'
   gem 'jquery-rails'
   gem 'jquery-ui-rails'
 end
