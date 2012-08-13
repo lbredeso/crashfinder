@@ -1,4 +1,25 @@
 $(function() {
+  $("#slider").slider({
+    value: 2011,
+    min: 2004,
+    max: 2011,
+    step: 1,
+    slide: function(event, ui) {
+      $("#year").html(ui.value);
+      processCrashes({
+        path: '/crashes/clusters',
+        year: function() {
+          return ui.value;
+        },
+        zoom: map.getZoom(),
+        content: function(crashData) {
+          return "<p>" + crashData.year + "</p><p>" + crashData.count + "</p>";
+        }
+      });
+    }
+  });
+  $("#year").html($("#slider").slider("value"));
+  
   var mapOptions = {
     // The center is in St. Paul at the moment.
     center: new google.maps.LatLng(45.954215, -93.089819),
@@ -41,7 +62,7 @@ $(function() {
     var ne = args.northEast || map.getBounds().getNorthEast();
   
     $.ajax({
-      url: args.path + "?year=" + args.year + "&zoom=" + args.zoom +
+      url: args.path + "?year=" + args.year() + "&zoom=" + args.zoom +
         "&sw_lat=" + sw.lat() + "&sw_lon=" + sw.lng() + "&ne_lat=" + ne.lat() + "&ne_lon=" + ne.lng(),
       dataType: 'json',
       success: function(response) {
@@ -82,7 +103,9 @@ $(function() {
     var northEast = rectangle.getBounds().getNorthEast();
     processCrashes({
       path: '/crashes',
-      year: '2011',
+      year: function() {
+        return '2011';
+      },
       southWest: southWest,
       northEast: northEast,
       callback: function(response) {
@@ -110,7 +133,9 @@ $(function() {
     zoom = map.getZoom();
     processCrashes({
       path: '/crashes/clusters',
-      year: '2011',
+      year: function() {
+        return $("#year").html();
+      },
       zoom: zoom,
       content: function(crashData) {
         return "<p>" + crashData.year + "</p><p>" + crashData.count + "</p>";

@@ -111,6 +111,18 @@ namespace :crashes do
     puts "Creating city_crashes collection..."
     CityCrash.build
   end
+  
+  desc "Build clusters"
+  task :build_clusters, [:start_year, :end_year] => :environment do |t, args|
+    beginning_time = Time.now
+    start_year = args.start_year.to_i
+    end_year = args.end_year ? args.end_year.to_i : start_year
+    (start_year..end_year).each do |year|
+      CrashCluster.build year.to_s
+    end
+    end_time = Time.now
+    puts "Cluster building took #{end_time - beginning_time} seconds"
+  end
 end
 
 namespace :vehicles do

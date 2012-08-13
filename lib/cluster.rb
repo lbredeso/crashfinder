@@ -31,8 +31,6 @@ class Cluster
         end
       end
       
-      puts "#{events.size} events left..."
-      
       # If a marker has been added to cluster, add also the one
       # we were comparing to and remove the original from array.
       if cluster.size > 0
