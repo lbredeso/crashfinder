@@ -1,1 +1,2 @@
-web: bin/trinidad --threadsafe --rackup -p $PORT -e $RACK_ENV
+# web: bin/trinidad --threadsafe --rackup -p $PORT -e $RACK_ENV
+web: bundle exec rails server thin -p $PORT -e $RACK_ENV
