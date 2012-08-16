@@ -37,8 +37,8 @@ Crashfinder::Application.configure do
   # config.log_level = :debug
   
   # Make sure Heroku can pick up our logs
-  STDOUT.sync = true
-  config.logger = Logger.new(STDOUT) 
+  #STDOUT.sync = true
+  #config.logger = Logger.new(STDOUT) 
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new
