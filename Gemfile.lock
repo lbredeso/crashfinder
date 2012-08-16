@@ -76,6 +76,7 @@ GEM
       railties (>= 3.1.0)
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
+    jruby-rack (1.1.7)
     json (1.6.5)
     json (1.6.5-java)
     less (2.2.1)
@@ -110,10 +111,6 @@ GEM
       spoon (~> 0.0)
     pry-rails (0.1.6)
       pry
-    puma (1.6.1)
-      rack (~> 1.2)
-    puma (1.6.1-java)
-      rack (~> 1.2)
     rack (1.4.1)
     rack-cache (1.1)
       rack (>= 0.4)
@@ -169,6 +166,10 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
+    trinidad (1.4.0)
+      jruby-rack (>= 1.1.7)
+      trinidad_jars (>= 1.0.5)
+    trinidad_jars (1.0.5)
     turn (0.8.3)
       ansi
     tzinfo (0.3.31)
@@ -189,9 +190,9 @@ DEPENDENCIES
   mongo_mapper (= 0.11.0)
   pry
   pry-rails
-  puma
   rails (~> 3.2.0)
   rspec-rails
   sass-rails (~> 3.2.0)
+  trinidad
   turn
   twitter-bootstrap-rails!
