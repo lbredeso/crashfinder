@@ -1,15 +1,10 @@
 class ClustersController < ApplicationController
   def index
-    box = [[params[:sw_lon].to_f, params[:sw_lat].to_f], [params[:ne_lon].to_f, params[:ne_lat].to_f]]
-    
     clusters = CrashCluster.where(
       :year => params[:year],
       :zoom => params[:zoom].to_i,
-      :location => {
-        '$within' => {
-          '$box' => box
-        }
-      }
+      :lat => { '$gte' => params[:sw_lat].to_f, '$lte' => params[:ne_lat].to_f },
+      :lng => { '$gte' => params[:sw_lng].to_f, '$lte' => params[:ne_lng].to_f }
     ).all
     
     respond_to do |format|

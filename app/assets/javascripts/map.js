@@ -63,7 +63,7 @@ $(function() {
   
     $.ajax({
       url: args.path + "?year=" + args.year() + "&zoom=" + args.zoom +
-        "&sw_lat=" + sw.lat() + "&sw_lon=" + sw.lng() + "&ne_lat=" + ne.lat() + "&ne_lon=" + ne.lng(),
+        "&sw_lat=" + sw.lat() + "&sw_lng=" + sw.lng() + "&ne_lat=" + ne.lat() + "&ne_lng=" + ne.lng(),
       dataType: 'json',
       success: function(response) {
         clearMarkers();
