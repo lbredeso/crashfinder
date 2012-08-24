@@ -20,10 +20,13 @@ $(function() {
   });
   $("#year").html($("#slider").slider("value"));
   
+  var currentYear = 2011;
+  var currentZoom = 5;
+  
   var mapOptions = {
     // The center is in St. Paul at the moment.
     center: new google.maps.LatLng(45.954215, -93.089819),
-    zoom: 5,
+    zoom: currentZoom,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
   var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
@@ -38,9 +41,10 @@ $(function() {
   var markers = [];
   var infoWindow;
   var infoWindowMarker;
-  var clearMarkers = function() {
+
+  var clearMarkers = function(year, zoom) {
     $.each(markers, function(index, marker) {
-      if (marker != infoWindowMarker) {
+      if (marker != infoWindowMarker || currentYear != year || currentZoom != zoom) {
         marker.setMap(null);
       }
     });
@@ -66,7 +70,9 @@ $(function() {
         "&sw_lat=" + sw.lat() + "&sw_lng=" + sw.lng() + "&ne_lat=" + ne.lat() + "&ne_lng=" + ne.lng(),
       dataType: 'json',
       success: function(response) {
-        clearMarkers();
+        clearMarkers(args.year(), args.zoom);
+        currentYear = args.year();
+        currentZoom = args.zoom;
         
         if (args.callback) {
           args.callback(response);
