@@ -113,15 +113,17 @@ namespace :crashes do
   end
   
   desc "Build clusters"
-  task :build_clusters, [:start_year, :end_year] => :environment do |t, args|
-    beginning_time = Time.now
+  task :build_clusters, [:start_year, :end_year, :zoom] => :environment do |t, args|
     start_year = args.start_year.to_i
     end_year = args.end_year ? args.end_year.to_i : start_year
+    zoom = args.zoom
     (start_year..end_year).each do |year|
-      CrashCluster.build year.to_s
+      if zoom
+        CrashCluster.build year.to_s, [zoom.to_i]
+      else
+        CrashCluster.build year.to_s, (5..15)
+      end
     end
-    end_time = Time.now
-    puts "Cluster building took #{end_time - beginning_time} seconds"
   end
 end
 
