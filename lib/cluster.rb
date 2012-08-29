@@ -10,8 +10,6 @@ class Cluster
     puts "Searching through #{events.size} events..."
     
     # Loop until all events are compared
-    # Optimizing this is complicated.  Ordering won't really help, as the search is in 2 dimensions.
-    # Keeping track of "single" cluster events may be helpful.
     until events.size == 0
       last_event = events.shift
       cluster = []

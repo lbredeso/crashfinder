@@ -96,7 +96,7 @@ namespace :crashes do
     CSV.foreach("lib/data/location/#{file}") do |row|
       crash = Crash.find row[0]
       puts "Update crash location for accn #{crash.id}"
-      crash.update_attributes :location => [row[1].to_f, row[2].to_f]
+      crash.update_attributes lng: row[1].to_f, lat: row[2].to_f
     end
   end
   

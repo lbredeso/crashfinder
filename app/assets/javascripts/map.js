@@ -81,7 +81,7 @@ $(function() {
           var color = Color.generate(maxCrashCount);
           $.each(response, function(index, crashData) {
             var crash = new google.maps.Marker({
-              position: new google.maps.LatLng(crashData.location[1], crashData.location[0]),
+              position: new google.maps.LatLng(crashData.lat, crashData.lng),
               map: map,
               icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|" + color.toHex(crashData.count) + "|FFFFFF"
             });
@@ -127,7 +127,7 @@ $(function() {
         }
         infoWindowMarker = crash;
         infoWindow = new google.maps.InfoWindow({
-          content: "<p>" + '2011' + "</p><p>" + response.length + " crashes</p>",
+          content: "<p>" + response.length + " crashes</p>",
           size: new google.maps.Size(50, 50)
         });
         infoWindow.open(map, crash);
@@ -137,6 +137,11 @@ $(function() {
   
   google.maps.event.addListener(map, 'idle', function() {
     zoom = map.getZoom();
+    
+    // Keep the zoom within the bounds we have data for.
+    zoom = zoom < 5 ? 5 : zoom;
+    zoom = zoom > 15 ? 15 : zoom;
+    
     processCrashes({
       path: '/crashes/clusters',
       year: function() {
@@ -144,7 +149,7 @@ $(function() {
       },
       zoom: zoom,
       content: function(crashData) {
-        return "<p>" + crashData.year + "</p><p>" + crashData.count + "</p>";
+        return "<p>" + crashData.count + " crashes</p>";
       }
     });
   });

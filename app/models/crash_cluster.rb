@@ -23,7 +23,7 @@ class CrashCluster
     
     zoom_levels.each do |zoom|
       puts "Removing clusters for year: #{year}, zoom: #{zoom}"
-      CrashCluster.collection.remove(year: year)
+      CrashCluster.collection.remove(year: year, zoom: zoom)
       
       beginning_time = Time.now
       puts "Building cluster for year: #{year}, zoom: #{zoom}..."
@@ -43,7 +43,8 @@ class CrashCluster
     {
       year: self.year,
       count: self.count,
-      location: self.location
+      lng: self.lng,
+      lat: self.lat
     }
   end
 end
