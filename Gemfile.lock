@@ -1,8 +1,8 @@
 GIT
   remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
-  revision: 86cffd50084953ce59938a1f2f097a0be8b973b0
+  revision: 2d57ce1953bb912750b918be9b4790d4ddf7fc35
   specs:
-    twitter-bootstrap-rails (2.1.1)
+    twitter-bootstrap-rails (2.1.3)
       actionpack (>= 3.1)
       less-rails (~> 2.2.3)
       railties (>= 3.1)
@@ -40,6 +40,8 @@ GEM
       multi_json (~> 1.0)
     ansi (1.3.0)
     arel (3.0.2)
+    bcrypt-ruby (3.0.1)
+    bcrypt-ruby (3.0.1-java)
     bouncy-castle-java (1.5.0146.1)
     bson (1.5.2)
     bson (1.5.2-java)
@@ -59,6 +61,8 @@ GEM
     execjs (1.2.9)
       multi_json (~> 1.0)
     factory_girl (2.0.3)
+    faraday (0.8.4)
+      multipart-post (~> 1.1)
     haml (3.1.4)
     haml-rails (0.3.4)
       actionpack (~> 3.0)
@@ -66,6 +70,7 @@ GEM
       haml (~> 3.0)
       railties (~> 3.0)
     hike (1.2.1)
+    httpauth (0.1)
     i18n (0.6.0)
     journey (1.0.3)
     jquery-rails (1.0.19)
@@ -76,7 +81,7 @@ GEM
       railties (>= 3.1.0)
     jruby-openssl (0.7.7)
       bouncy-castle-java (>= 1.5.0146.1)
-    jruby-rack (1.1.7)
+    jruby-rack (1.1.9)
     json (1.6.5)
     json (1.6.5-java)
     less (2.2.1)
@@ -97,6 +102,12 @@ GEM
       activesupport (~> 3.0)
       plucky (~> 0.4.0)
     multi_json (1.0.3)
+    multipart-post (1.1.5)
+    oauth (0.4.6)
+    oauth2 (0.6.0)
+      faraday (~> 0.7)
+      httpauth (~> 0.1)
+      multi_json (~> 1.0)
     plucky (0.4.4)
       mongo (~> 1.5)
     polyglot (0.3.3)
@@ -155,6 +166,10 @@ GEM
       sass (>= 3.1.10)
       tilt (~> 1.3)
     slop (2.4.4)
+    sorcery (0.7.13)
+      bcrypt-ruby (~> 3.0.0)
+      oauth (~> 0.4.4)
+      oauth2 (~> 0.6.0)
     spoon (0.0.1)
     sprockets (2.1.2)
       hike (~> 1.2)
@@ -166,10 +181,10 @@ GEM
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
-    trinidad (1.4.0)
+    trinidad (1.4.1)
       jruby-rack (>= 1.1.7)
       trinidad_jars (>= 1.0.5)
-    trinidad_jars (1.0.5)
+    trinidad_jars (1.0.6)
     turn (0.8.3)
       ansi
     tzinfo (0.3.31)
@@ -193,6 +208,7 @@ DEPENDENCIES
   rails (~> 3.2.0)
   rspec-rails
   sass-rails (~> 3.2.0)
+  sorcery
   trinidad
   turn
   twitter-bootstrap-rails!

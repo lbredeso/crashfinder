@@ -22,6 +22,7 @@ gem 'twitter-bootstrap-rails', :github => 'seyhunak/twitter-bootstrap-rails'
 gem 'haml-rails'
 gem 'jruby-openssl'
 gem 'trinidad'
+gem 'sorcery'
 # gem 'puma'
 
 # Use unicorn as the web server  	
