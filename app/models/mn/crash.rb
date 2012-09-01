@@ -1,11 +1,11 @@
 class MN::Crash < Crash
-  ACTIVE = [:_id, :month, :day, :year, :weekday, :time, :lng, :lat, :accdate, :city, :city_township, :city_township_name, :county, :county_name, :locrel, :mile_point, :route_id, :rtnumber, :rtsys, :truem1, :truem3]
+  ACTIVE = [:accn, :month, :day, :year, :weekday, :time, :lng, :lat, :accdate, :locrel, :mile_point, :route_id, :rtnumber, :rtsys, :truem1, :truem3]
   
   many :people
   many :vehicles
   
   # DPS fields
-  # key :accn, String
+  key :accn, String
   key :accdate, String
   key :city, String
   key :county, String

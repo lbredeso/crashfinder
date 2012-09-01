@@ -23,6 +23,8 @@ module MN
           end
         end
       end
+      crash[:_id] = "MN-#{crash[:accn]}"
+      crash[:_type] = "MN::Crash"
       crash[:route_id] = crash[:rtsys][1..2] + pad_rtnumber(crash[:rtnumber])
       crash[:mile_point] = "#{crash[:truem1]}.#{crash[:truem3]}".to_f
       crash[:accdate] =~ /([\d]{2})\/([\d]{2})\/([\d]{4})/
@@ -31,14 +33,16 @@ module MN
       crash[:year] = $3
       crash[:weekday] = Date.strptime(crash[:accdate], "%m/%d/%Y").strftime("%A")
       
-      # Townships are a weird case, as they are uniquely identified by county + township code
-      # They also are thrown in with the city code, in cases where the city isn't known (e.g. rural crashes).
-      crash[:city_township] = if crash[:city].size == 3
-        "#{crash[:county]}#{crash[:city]}"
-      else
-        crash[:city]
+      if Crash::ACTIVE.include? :city
+        # Townships are a weird case, as they are uniquely identified by county + township code
+        # They also are thrown in with the city code, in cases where the city isn't known (e.g. rural crashes).
+        crash[:city_township] = if crash[:city].size == 3
+          "#{crash[:county]}#{crash[:city]}"
+        else
+          crash[:city]
+        end
+        crash[:city_township_name] = @code_map['city_township'][crash[:city_township]]
       end
-      crash[:city_township_name] = @code_map['city_township'][crash[:city_township]]
       
       crash
     end
