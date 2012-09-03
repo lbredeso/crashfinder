@@ -1,4 +1,5 @@
 require 'mn/crash_converter'
+require 'mn/location_generator'
 require 'set'
 require 'csv'
 
@@ -9,14 +10,15 @@ namespace :crashes do
   task :load, [:state, :start_year, :end_year] => :environment do |t, args|
     state = args.state
     state_module = self.class.const_get(state.upcase.to_sym)
-    crash_converter = state_module::CrashConverter.new
     
     start_year = args.start_year.to_i
     end_year = args.end_year ? args.end_year.to_i : start_year
     
     (start_year..end_year).each do |year|
-      puts "Loading crash data for #{year}"
-      year_file = File.join Rails.root, "lib", "data", "mn", crash_converter.file_name(year)
+      crash_converter = state_module::CrashConverter.new year
+      
+      year_file = File.join Rails.root, "lib", "data", "mn", crash_converter.file_name
+      puts "Loading crash data from #{year_file}"
       crashes = []
       File.open(year_file).each_line do |line|
         crashes << crash_converter.convert(line)
@@ -32,29 +34,14 @@ namespace :crashes do
   end
   
   desc "Generate location file"
-  task :generate_location_file, [:year] => :environment do |t, args|
-    year = args.year
-    last_page = Crash.count(:year => year, :locrel => ['1', '2', '3']) / BATCH_SIZE + 1
-    puts "Generating crash location file for #{year}"
-    CSV.open("mn-#{year}-loc.csv", "wb") do |csv|
-      current_page = 1
-      until current_page > last_page
-        crashes = Crash.paginate({
-          :year => year,
-          :locrel => ['1', '2', '3'],
-          :order => :accn,
-          :per_page => BATCH_SIZE,
-          :page => current_page
-        })
-        crashes.each do |crash|
-          # When the rtnumber ends in 8888 or 9999, it is invalid.  This can happen when it is
-          # known which road the crash occurred on, just not precisely where on that road.
-          if crash.rtnumber !~ /9999$/ and crash.rtnumber !~ /8888$/
-            csv << [crash.accn, crash.route_id, crash.mile_point]
-          end
-        end
-        current_page += 1
-      end
+  task :generate_location_file, [:state, :start_year, :end_year] => :environment do |t, args|
+    state = args.state
+    start_year = args.start_year.to_i
+    end_year = args.end_year ? args.end_year.to_i : start_year
+    
+    location_generator = self.class.const_get(state.upcase.to_sym)::LocationGenerator.new
+    (start_year..end_year).each do |year|
+      location_generator.generate year.to_s
     end
   end
   

@@ -1,6 +1,7 @@
 module MN
   class CrashConverter
-    def initialize
+    def initialize year
+      @year = year
       @layout = process_layout "crash", "A7A9A9"
       @code_map = Code.map
     end
@@ -24,9 +25,25 @@ module MN
         end
       end
       crash[:_id] = "MN-#{crash[:accn]}"
+      crash.delete :accn
       crash[:_type] = "MN::Crash"
-      crash[:route_id] = crash[:rtsys][1..2] + pad_rtnumber(crash[:rtnumber])
-      crash[:mile_point] = "#{crash[:truem1]}.#{crash[:truem3]}".to_f
+      
+      # Location info varies a bit between v1 and v2
+      if version == :v1
+        crash[:route_id] = pad_route_id(crash[:rtsys][1..2], crash[:rtnumber])
+        crash[:refpt1] = sanitize_refpt1 crash[:refpt1]
+        crash[:refpt2] = sanitize_refpt2 crash[:refpt2]
+        crash[:mile_point] = "#{crash[:refpt1]}.#{crash[:refpt2]}".to_f
+        crash.delete :refpt1
+        crash.delete :refpt2
+      else
+        crash[:route_id] = crash[:rtsys][1..2] + pad_rtnumber(crash[:rtnumber])
+        crash[:mile_point] = "#{crash[:truem1]}.#{crash[:truem3]}".to_f
+        crash.delete :truem1
+        crash.delete :truem3
+      end
+      crash.delete :rtsys
+      crash.delete :rtnumber
       crash[:accdate] =~ /([\d]{2})\/([\d]{2})\/([\d]{4})/
       crash[:month] = $1
       crash[:day] = $2
@@ -47,13 +64,23 @@ module MN
       crash
     end
     
-    def file_name year
-      "crash/mn-#{year}-acc.txt"
+    def file_name
+      "crash/mn-#{@year}-acc.txt"
     end
     
-    private
+    private 
+    def version
+      case
+      when @year.to_i <= 2002
+        :v1
+      when @year.to_i >= 2004
+        :v2
+      end
+    end
+    
     def process_layout type, pattern
-      file = File.join Rails.root, "lib", "mn", "field_layout", "#{type}.txt"
+      file = File.join Rails.root, "lib", "mn", "field_layout", version.to_s, "#{type}.txt"
+      puts "Using layout #{file}"
       fields = []
       File.open(file).each_line do |line|
         start, name, type_length = line.unpack pattern
@@ -80,6 +107,27 @@ module MN
       else
         rtnumber
       end
+    end
+    
+    def pad_route_id rtsys, rtnumber
+      size = if rtnumber =~ /[A-Z]/
+        11
+      else
+        10
+      end
+      
+      "#{rtsys}#{rtnumber.rjust(size - rtsys.size, '0')}"
+    end
+    
+    # Looks like this is empty sometimes, except for a period (in 1991, at least).
+    def sanitize_refpt1 refpt1
+      refpt1.strip.gsub(".", "")
+    end
+    
+    # Looks like this is empty sometimes, except for a period (in 1991, at least).
+    # Mostly, however, we need to strip out the "00.".  I think it's like truem2, which I'm told is virtually always 00.
+    def sanitize_refpt2 refpt2
+      refpt2.strip.gsub(/0[\d]{1}\./, "").gsub(".", "")
     end
     
     class Field < Struct.new(:start, :name, :length)
