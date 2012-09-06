@@ -46,10 +46,11 @@ namespace :crashes do
   end
   
   desc "Update locations from given file"
-  task :update_locations, [:file] => :environment do |t, args|
+  task :update_locations, [:state, :file] => :environment do |t, args|
+    state = args.state
     file = args.file
-    puts "Updating locations from #{file}"
-    CSV.foreach("lib/data/location/#{file}") do |row|
+    puts "Updating locations for #{state} from #{file}"
+    CSV.foreach("lib/data/#{state}/location/#{file}") do |row|
       crash = Crash.find row[0]
       puts "Update crash location for accn #{crash.id}"
       crash.update_attributes lng: row[1].to_f, lat: row[2].to_f

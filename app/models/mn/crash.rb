@@ -1,5 +1,5 @@
 class MN::Crash < Crash
-  ACTIVE = [:accn, :month, :day, :year, :weekday, :time, :lng, :lat, :accdate, :locrel, :mile_point, :refpt1, :refpt2, :route_id, :rtnumber, :rtsys, :truem1, :truem3]
+  ACTIVE = [:accn, :city, :county, :month, :day, :year, :weekday, :time, :lng, :lat, :accdate, :locrel, :mile_point, :refpt1, :refpt2, :route_id, :rtnumber, :rtsys, :truem1, :truem3]
   
   many :people
   many :vehicles

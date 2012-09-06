@@ -19,9 +19,9 @@ module MN
         end
         if Crash::ACTIVE.include? field.name.intern
           crash[field.name.intern] = data[index].send(converter)
-          if @code_map[field.name]
-            crash["#{field.name}_name"] = @code_map[field.name][crash[field.name.intern]]
-          end
+          # if @code_map[field.name]
+          #   crash["#{field.name}_name"] = @code_map[field.name][crash[field.name.intern]]
+          # end
         end
       end
       crash[:_id] = "MN-#{crash[:accn]}"
@@ -30,7 +30,9 @@ module MN
       
       # Location info varies a bit between v1 and v2
       if version == :v1
-        crash[:route_id] = pad_route_id(crash[:rtsys][1..2], crash[:rtnumber])
+        crash[:route_id] = construct_route_id(crash[:rtsys][1..2], crash[:rtnumber], crash[:city], crash[:county])
+        crash.delete :city
+        crash.delete :county
         crash[:refpt1] = sanitize_refpt1 crash[:refpt1]
         crash[:refpt2] = sanitize_refpt2 crash[:refpt2]
         crash[:mile_point] = "#{crash[:refpt1]}.#{crash[:refpt2]}".to_f
@@ -50,7 +52,7 @@ module MN
       crash[:year] = $3
       crash[:weekday] = Date.strptime(crash[:accdate], "%m/%d/%Y").strftime("%A")
       
-      if Crash::ACTIVE.include? :city
+      if crash[:city]
         # Townships are a weird case, as they are uniquely identified by county + township code
         # They also are thrown in with the city code, in cases where the city isn't known (e.g. rural crashes).
         crash[:city_township] = if crash[:city].size == 3
@@ -109,14 +111,33 @@ module MN
       end
     end
     
-    def pad_route_id rtsys, rtnumber
-      size = if rtnumber =~ /[A-Z]/
-        11
+    # From Ramsey_Roads.shp.xml:
+    #
+    # The unique identifier for the entire route within the state in the increasing direction unless it is a decreasing one way, using the following format: 
+    # RRJJJJNNNNA where, RR = Route_System, JJJJ = Jurisdiction, defined as below based on Route_System (01, 02, 03 = 0000; 05, 10 = City Census Code; 
+    # All others = XX00 where XX is XX = TIS County Code), NNNN = Route Number padded with leading zeros, and A = Alpha code on the end of particular routes 
+    # or blank if none is present. 
+    def construct_route_id rtsys, rtnumber, city, county
+      size = if rtnumber.size == 8
+        # It looks like sometimes the Jurisdiction is included...
+        8
+      elsif rtnumber =~ /[A-Z]/
+        5
       else
-        10
+        4
       end
       
-      "#{rtsys}#{rtnumber.rjust(size - rtsys.size, '0')}"
+      jurisdiction = if rtnumber.size == 8
+        ""
+      elsif ["01", "02", "03"].include? rtsys
+        "0000"
+      elsif ["05", "10"].include? rtsys
+        city
+      else
+        "#{county}00"
+      end
+      
+      "#{rtsys}#{jurisdiction}#{rtnumber.rjust(size, '0')}"
     end
     
     # Looks like this is empty sometimes, except for a period (in 1991, at least).

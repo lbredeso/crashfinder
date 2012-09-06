@@ -1,7 +1,7 @@
 $(function() {
   $("#slider").slider({
     value: 2011,
-    min: 2004,
+    min: 1997,
     max: 2011,
     step: 1,
     slide: function(event, ui) {
