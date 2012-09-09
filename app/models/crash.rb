@@ -5,7 +5,8 @@ class Crash
   key :day, String
   key :year, String
   key :weekday, String
-  key :time, String # TODO: this
+  key :hour, String
+  key :minute, String
   key :lng, Float
   key :lat, Float
   

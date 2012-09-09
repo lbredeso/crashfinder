@@ -46,11 +46,14 @@ module MN
       end
       crash.delete :rtsys
       crash.delete :rtnumber
+      
+      # Date
       crash[:accdate] =~ /([\d]{2})\/([\d]{2})\/([\d]{4})/
       crash[:month] = $1
       crash[:day] = $2
       crash[:year] = $3
       crash[:weekday] = Date.strptime(crash[:accdate], "%m/%d/%Y").strftime("%A")
+      crash.delete :accdate
       
       if crash[:city]
         # Townships are a weird case, as they are uniquely identified by county + township code

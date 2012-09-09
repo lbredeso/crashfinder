@@ -1,11 +1,12 @@
 require 'mn/crash_converter'
 require 'mn/location_generator'
+require 'nd/crash_converter'
 require 'set'
 require 'csv'
 
 BATCH_SIZE = 1000
 
-namespace :crashes do
+namespace :crash do
   desc "Load crash data"
   task :load, [:state, :start_year, :end_year] => :environment do |t, args|
     state = args.state
@@ -17,11 +18,12 @@ namespace :crashes do
     (start_year..end_year).each do |year|
       crash_converter = state_module::CrashConverter.new year
       
-      year_file = File.join Rails.root, "lib", "data", "mn", crash_converter.file_name
+      year_file = File.join Rails.root, "lib", "data", state, crash_converter.file_name
       puts "Loading crash data from #{year_file}"
       crashes = []
       File.open(year_file).each_line do |line|
-        crashes << crash_converter.convert(line)
+        crash = crash_converter.convert(line)
+        crashes << crash if crash
         if crashes.size % BATCH_SIZE == 0
           puts "Saving..."
           state_module::Crash.collection.insert crashes
@@ -31,6 +33,27 @@ namespace :crashes do
       puts "Saving..."
       state_module::Crash.collection.insert crashes
     end
+  end
+  
+  desc "Load crash data from a file"
+  task :load_file, [:state, :file] => :environment do |t, args|
+    state = args.state
+    state_module = self.class.const_get(state.upcase.to_sym)
+    file = args.file
+    
+    crash_converter = state_module::CrashConverter.new
+    crashes = []
+    File.open("lib/data/#{state}/#{file}").each_line do |line|
+      crash = crash_converter.convert(line)
+      crashes << crash if crash
+      if crashes.size % BATCH_SIZE == 0
+        puts "Saving..."
+        state_module::Crash.collection.insert crashes
+        crashes = []
+      end
+    end
+    puts "Saving..."
+    state_module::Crash.collection.insert crashes
   end
   
   desc "Generate location file"
@@ -81,23 +104,5 @@ namespace :crashes do
         CrashCluster.build year.to_s, (5..15)
       end
     end
-  end
-end
-
-def bulk_save type, things
-  accns = Set.new(things.map { |t| t.accn }).to_a
-  crashes = Crash.where(:id => accns).all.inject({}) do |crashes, crash|
-    crashes[crash.id] = crash
-    crashes
-  end
-  things.each do |thing|
-    if crashes[thing.accn]
-      crashes[thing.accn].send(type.to_s.downcase.pluralize) << thing
-    else
-      puts "Crash #{thing.accn} not found!  Better investigate..."
-    end
-  end
-  crashes.values.each do |crash|
-    crash.save
   end
 end
