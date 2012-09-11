@@ -4,8 +4,14 @@ class Cluster
   RADIUS = 85445659.4471
   
   # If the list of events is large, ensure it is sorted by longitude for reasonable performance.
-  def find_by events, distance, zoom
-    clustered = []
+  def create year, events, distance, zoom
+    puts "Removing clusters for year: #{year}, zoom: #{zoom}"
+    CrashCluster.collection.remove(year: year, zoom: zoom)
+    
+    beginning_time = Time.now
+    puts "Building cluster for year: #{year}, zoom: #{zoom}..."
+    
+    clusters = []
     events = events.clone
     puts "Searching through #{events.size} events..."
     
@@ -33,14 +39,22 @@ class Cluster
       # we were comparing to and remove the original from array.
       if cluster.size > 0
         cluster.push last_event
-        clustered.push cluster
+        clusters.push cluster
         events -= cluster
       else
-        clustered.push [last_event]
+        clusters.push [last_event]
       end
     end
     
-    clustered
+    # Persist the new clusters
+    clusters.each do |cluster|
+      crash_cluster = CrashCluster.new year: year, count: cluster.size, zoom: zoom
+      crash_cluster.lng = cluster.map { |c| c.lng }.inject(0) { |sum, lng| sum + lng } / cluster.size
+      crash_cluster.lat = cluster.map { |c| c.lat }.inject(0) { |sum, lat| sum + lat } / cluster.size
+      crash_cluster.save
+    end
+    end_time = Time.now
+    puts "Year: #{year}, zoom: #{zoom} cluster building took #{end_time - beginning_time} seconds"
   end
   
   def lng_to_x lon
