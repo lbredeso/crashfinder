@@ -1,12 +1,12 @@
 # Adapted from:  http://www.appelsiini.net/2008/11/introduction-to-marker-clustering-with-google-maps
-class Cluster
+class Clusterer
   OFFSET = 268435456
   RADIUS = 85445659.4471
   
   # If the list of events is large, ensure it is sorted by longitude for reasonable performance.
-  def create year, events, distance, zoom
+  def execute year, events, distance, zoom
     puts "Removing clusters for year: #{year}, zoom: #{zoom}"
-    CrashCluster.collection.remove(year: year, zoom: zoom)
+    Cluster.collection.remove(year: year, zoom: zoom)
     
     beginning_time = Time.now
     puts "Building cluster for year: #{year}, zoom: #{zoom}..."
@@ -48,7 +48,7 @@ class Cluster
     
     # Persist the new clusters
     clusters.each do |cluster|
-      crash_cluster = CrashCluster.new year: year, count: cluster.size, zoom: zoom
+      crash_cluster = Cluster.new year: year, count: cluster.size, zoom: zoom
       crash_cluster.lng = cluster.map { |c| c.lng }.inject(0) { |sum, lng| sum + lng } / cluster.size
       crash_cluster.lat = cluster.map { |c| c.lat }.inject(0) { |sum, lat| sum + lat } / cluster.size
       crash_cluster.save

@@ -1,6 +1,6 @@
-require 'cluster'
+require 'clusterer'
 
-class CrashCluster
+class Cluster
   include MongoMapper::Document
   
   key :lng, Float
@@ -22,7 +22,7 @@ class CrashCluster
     }).sort { |a, b| a.lng <=> b.lng }
     
     zoom_levels.each do |zoom|
-      Cluster.new.create year, crashes, 20, zoom
+      Clusterer.new.execute year, crashes, 20, zoom
     end
   end
   

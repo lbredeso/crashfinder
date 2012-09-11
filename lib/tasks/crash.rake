@@ -99,9 +99,9 @@ namespace :crash do
     zoom = args.zoom
     (start_year..end_year).each do |year|
       if zoom
-        CrashCluster.build year.to_s, [zoom.to_i]
+        Cluster.build year.to_s, [zoom.to_i]
       else
-        CrashCluster.build year.to_s, (5..15)
+        Cluster.build year.to_s, (5..15)
       end
     end
   end
