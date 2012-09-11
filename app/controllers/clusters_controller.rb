@@ -1,6 +1,6 @@
 class ClustersController < ApplicationController
   def index
-    clusters = CrashCluster.where(
+    clusters = Cluster.where(
       :year => params[:year],
       :zoom => params[:zoom].to_i,
       :lat => { '$gte' => params[:sw_lat].to_f, '$lte' => params[:ne_lat].to_f },

@@ -1,25 +1,4 @@
 $(function() {
-  $("#slider").slider({
-    value: 2011,
-    min: 1997,
-    max: 2011,
-    step: 1,
-    slide: function(event, ui) {
-      $("#year").html(ui.value);
-      processCrashes({
-        path: '/crashes/clusters',
-        year: function() {
-          return ui.value;
-        },
-        zoom: map.getZoom(),
-        content: function(crashData) {
-          return "<p>" + crashData.year + "</p><p>" + crashData.count + "</p>";
-        }
-      });
-    }
-  });
-  $("#year").html($("#slider").slider("value"));
-  
   var currentYear = 2011;
   var currentZoom = 5;
   
@@ -42,9 +21,9 @@ $(function() {
   var infoWindow;
   var infoWindowMarker;
 
-  var clearMarkers = function(year, zoom) {
+  var clearMarkers = function(zoom) {
     $.each(markers, function(index, marker) {
-      if (marker != infoWindowMarker || currentYear != year || currentZoom != zoom) {
+      if (marker != infoWindowMarker || currentZoom != zoom) {
         marker.setMap(null);
       }
     });
@@ -66,12 +45,11 @@ $(function() {
     var ne = args.northEast || map.getBounds().getNorthEast();
   
     $.ajax({
-      url: args.path + "?year=" + args.year() + "&zoom=" + args.zoom +
+      url: args.path + "?year=" + args.year + "&zoom=" + args.zoom +
         "&sw_lat=" + sw.lat() + "&sw_lng=" + sw.lng() + "&ne_lat=" + ne.lat() + "&ne_lng=" + ne.lng(),
       dataType: 'json',
       success: function(response) {
-        clearMarkers(args.year(), args.zoom);
-        currentYear = args.year();
+        clearMarkers(args.zoom);
         currentZoom = args.zoom;
         
         if (args.callback) {
@@ -109,9 +87,7 @@ $(function() {
     var northEast = rectangle.getBounds().getNorthEast();
     processCrashes({
       path: '/crashes',
-      year: function() {
-        return '2011';
-      },
+      year: currentYear,
       southWest: southWest,
       northEast: northEast,
       callback: function(response) {
@@ -144,9 +120,7 @@ $(function() {
     
     processCrashes({
       path: '/crashes/clusters',
-      year: function() {
-        return $("#year").html();
-      },
+      year: currentYear,
       zoom: zoom,
       content: function(crashData) {
         return "<p>" + crashData.count + " crashes</p>";
