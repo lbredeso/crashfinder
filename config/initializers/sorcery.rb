@@ -119,7 +119,7 @@ Rails.application.config.sorcery.configure do |config|
     # specify username attributes, for example: [:username, :email].
     # Default: `[:username]`
     #
-    # user.username_attribute_names =
+    user.username_attribute_names = [:email]
 
 
     # change *virtual* password attribute, the one which is used until an encrypted one is generated.
@@ -180,7 +180,7 @@ Rails.application.config.sorcery.configure do |config|
     # encryption algorithm name. See 'encryption_algorithm=' for available options.
     # Default: `:bcrypt`
     #
-    # user.encryption_algorithm =
+    user.encryption_algorithm = :bcrypt
 
 
     # make this configuration inheritable for subclasses. Useful for ActiveRecord's STI.

@@ -1,17 +1,31 @@
 Crashfinder::Application.routes.draw do
-  root :to => 'crashes#map'
+  get "sessions/new"
+
+  get "users/new"
+
+  root to: 'crashes#map'
   
-  resources :crashes, :only => [:index, :show] do
+  resources :crashes, only: [:index, :show] do
     collection do
       get 'map'
     end
     collection do
-      resources :states, :only => [:index]
-      resources :counties, :only => [:index]
-      resources :cities, :only => [:index]
-      resources :clusters, :only => [:index]
+      resources :states, only: [:index]
+      resources :counties, only: [:index]
+      resources :cities, onl: [:index]
+      resources :clusters, only: [:index]
     end
   end
+  
+  resources :trends, only: [:index]
+  
+  resources :users
+  resources :sessions
+  
+  get "logout" => "sessions#destroy", as: "logout"
+  get "login" => "sessions#new", as: "login"
+  get "signup" => "users#new", as: "signup"
+  get "secret" => "home#secret", :as => "secret"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
