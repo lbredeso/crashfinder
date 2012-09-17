@@ -116,7 +116,7 @@ $(function() {
     
     // Keep the zoom within the bounds we have data for.
     zoom = zoom < 5 ? 5 : zoom;
-    zoom = zoom > 15 ? 15 : zoom;
+    zoom = zoom > 16 ? 16 : zoom;
     
     processCrashes({
       path: '/crashes/clusters',

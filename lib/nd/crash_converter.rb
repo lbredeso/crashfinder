@@ -23,8 +23,8 @@ module ND
         crash[:minute] = $2
         
         # Location
-        crash[:lat] = row[0][7]
-        crash[:lng] = row[0][8]
+        crash[:lat] = row[0][7].to_f
+        crash[:lng] = row[0][8].to_f
       end
       crash
     end

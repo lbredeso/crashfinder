@@ -101,7 +101,7 @@ namespace :crash do
       if zoom
         Cluster.build year.to_s, [zoom.to_i]
       else
-        Cluster.build year.to_s, (5..15)
+        Cluster.build year.to_s, (5..16)
       end
     end
   end
