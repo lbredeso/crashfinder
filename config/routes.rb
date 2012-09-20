@@ -1,9 +1,10 @@
 Crashfinder::Application.routes.draw do
-  get "sessions/new"
+  get "home/index"
 
+  get "sessions/new"
   get "users/new"
 
-  root to: 'crashes#map'
+  root to: 'home#index'
   
   resources :crashes, only: [:index, :show] do
     collection do

@@ -1,0 +1,13 @@
+- content_for :map_init do
+  :javascript
+    $(function() {
+      var map = new ClusterMap();
+      map.draw();
+    });
+
+.content
+  .row
+    .span12
+      %div{:style => "display: inline-block; position: relative; width: 100%;"}
+        %div{:style => "margin-top: 75%;"}
+          #map_canvas

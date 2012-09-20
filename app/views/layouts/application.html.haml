@@ -26,6 +26,7 @@
           = link_to "Crash Finder", root_path, class: 'brand'
           .container.nav-collapse
             %ul.nav
+              %li= link_to "Clusters", clusters_path
               - if current_user
                 %li= link_to "Trends", trends_path
               %li.dropdown
@@ -39,13 +40,9 @@
                     %li= link_to "Sign up", signup_path
 
     .container
-
-      .content
-        .row
-          .span12
-            - flash.each do |name, msg|
-              = content_tag :div, msg, :id => "flash_#{name}"
-            = yield
+      - flash.each do |name, msg|
+        = content_tag :div, msg, :id => "flash_#{name}"
+      = yield
     
       %footer
         %p &copy; Luke Bredeson 2012
@@ -54,3 +51,4 @@
       \==================================================
     / Placed at the end of the document so the pages load faster
     = javascript_include_tag "application"
+    = yield :map_init
