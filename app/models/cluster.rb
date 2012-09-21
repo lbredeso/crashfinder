@@ -9,6 +9,15 @@ class Cluster
   key :year, String
   key :zoom, Integer
   
+  scope :by_year, lambda { |year| where(year: year) }
+  scope :at_zoom, lambda { |zoom| where(zoom: zoom) }
+  scope :within, lambda { |sw_lat, ne_lat, sw_lng, ne_lng|
+    where(
+      lat: { '$gte' => sw_lat, '$lte' => ne_lat },
+      lng: { '$gte' => sw_lng, '$lte' => ne_lng }
+    )
+  }
+  
   BATCH_SIZE = 10000
   
   def self.build year, zoom_levels
