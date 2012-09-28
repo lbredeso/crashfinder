@@ -28,7 +28,8 @@
             %ul.nav
               %li= link_to "Clusters", clusters_path
               - if current_user
-                %li= link_to "Trends", trends_path
+                %li= link_to "Locations", locations_path
+                %li= link_to "Trends", "/trends"
               %li.dropdown
                 %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown'}
                   My Account <b class="caret"></b>

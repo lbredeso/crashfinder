@@ -1,0 +1,20 @@
+- content_for :map_init do
+  :javascript
+    $(function() {
+      var locationIds = #{@locations.map { |l| l.id.to_s } };
+      if (locationIds && locationIds.length > 0) {
+        var map = new LocationMap();
+        map.draw(locationIds[0]);
+      }
+    });
+    
+.content
+  - @locations.each do |location|
+    .row
+      .span12
+        = link_to location.label, "", id: location.id
+  .row
+    .span12
+      %div{:style => "display: inline-block; position: relative; width: 100%;"}
+        %div{:style => "margin-top: 75%;"}
+          #map_canvas

@@ -4,7 +4,7 @@ class User
   
   attr_protected :crypted_password, :salt
 
-  many :boxes
+  many :locations
 
   key :email, String, required: true, unique: true, format: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   key :crypted_password, String

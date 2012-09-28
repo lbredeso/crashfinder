@@ -1,4 +1,4 @@
-class YearBox
+class YearStat
   include MongoMapper::Document
   
   key :value, Hash
@@ -7,8 +7,8 @@ class YearBox
     <<-MAP
       function() {
         emit({
-          year: this.year,
-          user_id: userId
+          location_id: locationId,
+          year: this.year
         }, 1);
       }
     MAP
@@ -26,13 +26,13 @@ class YearBox
     REDUCE
   end
   
-  def self.build box
+  def self.build location
     Crash.collection.map_reduce(map, reduce, {
-      out: { merge: "year_boxes" },
-      scope: { userId: box.user.id },
+      out: { merge: "year_stats" },
+      scope: { locationId: location.id },
       query: {
-        lat: { '$gte' => box.sw_lat, '$lte' => box.ne_lat },
-        lng: { '$gte' => box.sw_lng, '$lte' => box.ne_lng }
+        lat: { '$gte' => location.sw_lat, '$lte' => location.ne_lat },
+        lng: { '$gte' => location.sw_lng, '$lte' => location.ne_lng }
       }
     })
   end

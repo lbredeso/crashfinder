@@ -18,8 +18,7 @@ Crashfinder::Application.routes.draw do
     end
   end
   
-  resources :trends, only: [:index]
-  
+  resources :locations
   resources :users
   resources :sessions
   
