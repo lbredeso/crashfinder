@@ -1,4 +1,6 @@
 Crashfinder::Application.routes.draw do
+  get "trends/index"
+
   get "home/index"
 
   get "sessions/new"
