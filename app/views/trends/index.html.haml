@@ -1,2 +1,12 @@
-%h1 Trends#index
-%p Find me in app/views/trends/index.html.haml
+- content_for :javascript do
+  :javascript
+    $(function() {
+      var trends = new Trends();
+      var locationIds = #{@locations.map { |l| l.id.to_s } };
+      trends.yearly(locationIds);
+    });
+
+.content
+  .row
+    .span12
+      #trends.chartWrapper

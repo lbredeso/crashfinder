@@ -4,7 +4,6 @@
       var map = new LocationMap();
       var locationIds = #{@locations.map { |l| l.id.to_s } };
       
-      // Draw initial map
       if (locationIds && locationIds.length > 0) {
         $.each(locationIds, function(index, locationId) {
           map.draw(locationId);

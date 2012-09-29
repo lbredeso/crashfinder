@@ -1,4 +1,6 @@
 Crashfinder::Application.routes.draw do
+  get "year_stats/index"
+
   get "trends/index"
 
   get "home/index"
@@ -11,7 +13,11 @@ Crashfinder::Application.routes.draw do
   resources :clusters, only: [:index]
   
   resources :locations
-  resources :trends
+  resources :trends, only: [:index] do
+    collection do
+      get :yearly
+    end
+  end
   
   resources :users
   resources :sessions

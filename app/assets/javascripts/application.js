@@ -9,4 +9,7 @@
 //= require jquery.ui.slider
 //= require twitter/bootstrap
 //= require raphael
+//= require g.raphael-min
+//= require g.line-min
+//= require underscore
 //= require_tree .

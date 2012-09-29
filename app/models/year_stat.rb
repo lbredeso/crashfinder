@@ -1,13 +1,18 @@
 class YearStat
   include MongoMapper::Document
   
-  key :value, Hash
+  key :value, Integer
+  
+  scope :by_user, lambda { |user| where('_id.user_id' => user.id) }
+  scope :in_order, sort('_id.location_id', '_id.year')
   
   def self.map
     <<-MAP
       function() {
         emit({
           location_id: locationId,
+          label: label,
+          user_id: userId,
           year: this.year
         }, 1);
       }
@@ -29,7 +34,7 @@ class YearStat
   def self.build location
     Crash.collection.map_reduce(map, reduce, {
       out: { merge: "year_stats" },
-      scope: { locationId: location.id },
+      scope: { locationId: location.id, label: location.label, userId: location.user.id },
       query: {
         lat: { '$gte' => location.sw_lat, '$lte' => location.ne_lat },
         lng: { '$gte' => location.sw_lng, '$lte' => location.ne_lng }
@@ -39,6 +44,8 @@ class YearStat
   
   def as_json options = {}
     {
+      locationId: self.id['location_id'],
+      label: self.id['label'],
       year: self.id['year'],
       count: self.value
     }
