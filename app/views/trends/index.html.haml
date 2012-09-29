@@ -5,6 +5,7 @@
       var locationIds = #{@locations.map { |l| l.id.to_s } };
       trends.yearly(locationIds);
       trends.monthly(locationIds);
+      trends.daily(locationIds);
     });
 
 .content
@@ -14,3 +15,6 @@
   .row
     .span12
       #monthly.chartWrapper
+  .row
+    .span12
+      #daily.chartWrapper

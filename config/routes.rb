@@ -17,6 +17,7 @@ Crashfinder::Application.routes.draw do
     collection do
       get :yearly
       get :monthly
+      get :daily
     end
   end
   
