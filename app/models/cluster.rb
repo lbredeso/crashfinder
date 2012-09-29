@@ -17,6 +17,7 @@ class Cluster
       lng: { '$gte' => sw_lng, '$lte' => ne_lng }
     )
   }
+  scope :top, lambda { |count| where(zoom: 16).sort(:count.desc).limit(count) }
   
   BATCH_SIZE = 10000
   

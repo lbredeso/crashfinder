@@ -1,4 +1,6 @@
 Crashfinder::Application.routes.draw do
+  get "top_ten/index"
+
   get "year_stats/index"
 
   get "trends/index"
@@ -11,6 +13,7 @@ Crashfinder::Application.routes.draw do
   root to: 'home#index'
   
   resources :clusters, only: [:index]
+  resources :top, only: [:index]
   
   resources :locations
   resources :trends, only: [:index] do
