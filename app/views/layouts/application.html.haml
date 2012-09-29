@@ -26,21 +26,18 @@
           = link_to "Crash Finder", root_path, class: 'brand'
           .container.nav-collapse
             %ul.nav
+              %li= link_to "Top", top_index_path
               %li= link_to "Clusters", clusters_path
               - if current_user
-                %li= link_to "Top", top_index_path
                 %li= link_to "Locations", locations_path
                 %li= link_to "Trends", "/trends"
-              %li.dropdown
-                %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown'}
-                  My Account <b class="caret"></b>
-                %ul.dropdown-menu
-                  - if current_user
+                %li.dropdown
+                  %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown'}
+                    My Account <b class="caret"></b>
+                  %ul.dropdown-menu
                     %li= link_to "Log out", logout_path
-                  - else
-                    %li= link_to "Log in", login_path 
-                    %li= link_to "Sign up", signup_path
-
+              - else
+                %li= link_to "Log in", login_path
     .container
       - flash.each do |name, msg|
         = content_tag :div, msg, :id => "flash_#{name}"
