@@ -21,7 +21,9 @@ class LocationsController < ApplicationController
   end
   
   def create
-    @location = Location.create params[:location]
+    @location = Location.new params[:location]
+    @location.user = current_user
+    @location.save
     respond_to do |format|
       format.json do
         render json: @location

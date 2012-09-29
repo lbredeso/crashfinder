@@ -12,6 +12,10 @@ class Location
   key :ne_lat, Float
   key :ne_lng, Float
   
+  before_save do |location|
+    location.label = location.id unless location.label
+  end
+  
   after_save do |location|
     YearStat.build location
   end

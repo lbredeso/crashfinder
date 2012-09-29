@@ -1,10 +1,22 @@
 - content_for :map_init do
   :javascript
     $(function() {
+      var map = new LocationMap();
       var locationIds = #{@locations.map { |l| l.id.to_s } };
+      
+      // Draw initial map
       if (locationIds && locationIds.length > 0) {
-        var map = new LocationMap();
-        map.draw(locationIds[0]);
+        $.each(locationIds, function(index, locationId) {
+          map.draw(locationId);
+          $("#" + locationId).on("click", function(e) {
+            e.preventDefault();
+            map.center(locationId);
+          });
+        });
+        
+        map.center(locationIds[0]);
+      } else {
+        map.blank();
       }
     });
     
@@ -12,7 +24,7 @@
   - @locations.each do |location|
     .row
       .span12
-        = link_to location.label, "", id: location.id
+        = link_to location.label, "#", id: location.id
   .row
     .span12
       %div{:style => "display: inline-block; position: relative; width: 100%;"}

@@ -8,8 +8,49 @@ var LocationMap = function() {
     map: map
   });
   
+  var saveLocation = function(rectangle, method, locationId) {
+    var location = {
+      id: locationId,
+      zoom: map.getZoom(),
+      sw_lat: rectangle.getBounds().getSouthWest().lat(),
+      sw_lng: rectangle.getBounds().getSouthWest().lng(),
+      ne_lat: rectangle.getBounds().getNorthEast().lat(),
+      ne_lng: rectangle.getBounds().getNorthEast().lng()
+    };
+    if (method == 'POST') {
+      location['label'] = prompt("What do you want to call this location?");
+    }
+    
+    $.ajax({
+      url: "/locations" + (locationId ? "/" + locationId : ""),
+      dataType: 'json',
+      type: method,
+      data: {
+        location: location
+      },
+      success: function(response) {
+        rectangle.setOptions({
+          editable: true
+        });
+      }
+    });
+  };
+  
+  google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(rectangle) {
+    saveLocation(rectangle, 'POST');
+  });
+  
   return {
-    draw: function(locationId) {
+    blank: function() {
+      map.setOptions({
+        // The center is in St. Paul at the moment.
+        center: new google.maps.LatLng(45.954215, -93.089819),
+        zoom: 5,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      });
+    },
+    
+    center: function(locationId) {
       $.ajax({
         url: "/locations/" + locationId,
         dataType: 'json',
@@ -21,6 +62,16 @@ var LocationMap = function() {
             zoom: location.zoom || 16,
             mapTypeId: google.maps.MapTypeId.ROADMAP
           });
+        }
+      });
+    },
+    
+    draw: function(locationId) {
+      $.ajax({
+        url: "/locations/" + locationId,
+        dataType: 'json',
+        success: function(response) {
+          var location = response;
             
           var rectangle = new google.maps.Rectangle();
           rectangle.setOptions({
@@ -34,56 +85,10 @@ var LocationMap = function() {
           });
             
           google.maps.event.addListener(rectangle, 'bounds_changed', function() {
-            $.ajax({
-              url: "/locations/" + locationId,
-              dataType: 'json',
-              type: 'PUT',
-              data: {
-                location: {
-                  id: locationId,
-                  zoom: map.getZoom(),
-                  sw_lat: rectangle.getBounds().getSouthWest().lat(),
-                  sw_lng: rectangle.getBounds().getSouthWest().lng(),
-                  ne_lat: rectangle.getBounds().getNorthEast().lat(),
-                  ne_lng: rectangle.getBounds().getNorthEast().lng()
-                }
-              },
-              success: function(response) {
-                alert("Success!")
-              }
-            });
+            saveLocation(rectangle, 'PUT', locationId);
           });
         }
       });
-  
-      google.maps.event.addListener(drawingManager, 'rectanglecomplete', function(rectangle) {
-        var southWest = rectangle.getBounds().getSouthWest();
-        var northEast = rectangle.getBounds().getNorthEast();
-        processCrashes({
-          path: '/locations/' + locationId,
-          southWest: southWest,
-          northEast: northEast,
-          callback: function(response) {
-            crash = new google.maps.Marker({
-              position: new google.maps.LatLng((southWest.lat() + northEast.lat()) / 2, (southWest.lng() + northEast.lng()) / 2),
-              map: map,
-              icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=" + response.count + "|FF0000|000000"
-            });
-            markers.push(crash);
-        
-            if (infoWindow) {
-              infoWindow.close();
-            }
-            infoWindowMarker = crash;
-            infoWindow = new google.maps.InfoWindow({
-              content: "<p>" + response.length + " crashes</p>",
-              size: new google.maps.Size(50, 50)
-            });
-            infoWindow.open(map, crash);
-          }
-        });
-      });
-      
     }
   };
 };
