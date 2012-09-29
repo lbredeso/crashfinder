@@ -16,6 +16,7 @@ Crashfinder::Application.routes.draw do
   resources :trends, only: [:index] do
     collection do
       get :yearly
+      get :monthly
     end
   end
   

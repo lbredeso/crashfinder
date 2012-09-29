@@ -4,9 +4,13 @@
       var trends = new Trends();
       var locationIds = #{@locations.map { |l| l.id.to_s } };
       trends.yearly(locationIds);
+      trends.monthly(locationIds);
     });
 
 .content
   .row
     .span12
-      #trends.chartWrapper
+      #yearly.chartWrapper
+  .row
+    .span12
+      #monthly.chartWrapper

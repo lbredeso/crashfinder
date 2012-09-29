@@ -18,6 +18,7 @@ class Location
   
   after_save do |location|
     YearStat.build location
+    MonthStat.build location
   end
   
   def as_json options = {}
