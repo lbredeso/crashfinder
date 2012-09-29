@@ -8,4 +8,5 @@
 //= require jquery_ujs
 //= require jquery.ui.slider
 //= require twitter/bootstrap
+//= require raphael
 //= require_tree .

@@ -6,19 +6,11 @@ Crashfinder::Application.routes.draw do
 
   root to: 'home#index'
   
-  resources :crashes, only: [:index, :show] do
-    collection do
-      get 'map'
-    end
-    collection do
-      resources :states, only: [:index]
-      resources :counties, only: [:index]
-      resources :cities, onl: [:index]
-      resources :clusters, only: [:index]
-    end
-  end
+  resources :clusters, only: [:index]
   
   resources :locations
+  resources :trends
+  
   resources :users
   resources :sessions
   

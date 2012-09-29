@@ -85,7 +85,7 @@ var ClusterMap = function() {
         zoom = zoom > 16 ? 16 : zoom;
     
         processCrashes({
-          path: '/crashes/clusters',
+          path: '/clusters',
           year: currentYear,
           zoom: zoom,
           content: function(crashData) {
