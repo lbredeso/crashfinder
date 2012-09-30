@@ -26,8 +26,8 @@
           = link_to "Crash Finder", root_path, class: 'brand'
           .container.nav-collapse
             %ul.nav
-              %li= link_to "Top", top_index_path
-              %li= link_to "Clusters", clusters_path
+              %li= link_to "Top 100", top_index_path
+              %li= link_to "Browse", clusters_path
               - if current_user
                 %li= link_to "Locations", locations_path
                 %li= link_to "Trends", "/trends"

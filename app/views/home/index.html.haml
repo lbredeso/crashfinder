@@ -1,22 +1,28 @@
 .hero-unit
-  %h1 Hello World!
-  %p This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
+  %h1 Crash Finder
+  %p Crash Finder is a tool that lets you take a closer look at crash data.  View top crash areas, just browse around, or sign up to create your own locations and see various trends.  While currently only covering Minnesota and North Dakota, with time the rest of the United State should be included, provided crash data exist.
 .row
-  .span4
-    %h2 Heading
-    %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+  .span3
+    %h2 Top 100
+    %p View the top 100 crash locations in the most recent complete year available:  2011.
     %p
-      %a.btn{:href => "#"}
-        View details &raquo;
-  .span4
-    %h2 Heading
-    %p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+      %a.btn{:href => top_index_path}
+        Top 100 &raquo;
+  .span3
+    %h2 Browse
+    %p Browse through "clusters" of crashes.
     %p
-      %a.btn{:href => "#"}
-        View details &raquo;
-  .span4
-    %h2 Heading
-    %p Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+      %a.btn{:href => clusters_path}
+        Browse &raquo;
+  .span3
+    %h2 Locations
+    %p Create locations by using the drawing tool to draw boxes over intersections of interest.
     %p
-      %a.btn{:href => "#"}
-        View details &raquo;
+      %a.btn{:href => locations_path}
+        Locations &raquo;
+  .span3
+    %h2 Trends
+    %p View crash trends across your locations.
+    %p
+      %a.btn{:href => trends_path}
+        Trends &raquo;
