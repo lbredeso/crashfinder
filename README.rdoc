@@ -10,9 +10,12 @@ This project aims to aid public understanding of crash data, starting in the sta
 
     rake db:seed
 
-3. Load crash data for any years you wish
+3. Load crash data for any states and years you wish
     
-    rake crashes:load[2011]
+    rake crash:load[mn,1997,2002]
+    rake crash:load[mn,2004,2011]
+    rake crash:load_file[nd,nd-2005-2012.csv]
+    db.crashes.remove({_type: "ND::Crash", year: "2012"})
 
 4. Add indexes
 
@@ -20,14 +23,14 @@ This project aims to aid public understanding of crash data, starting in the sta
     
 5. Generate location file
 
-    rake crashes:generate_location_file[2011]
+    rake crash:generate_location_file[2011]
     
 6. Use mn_location_finder to convert these locations to a latitude/longitude file
     
 7. Load the converted latitude/longitude location file back in
 
-    rake crashes:update_locations[mn-2011-locations.csv]
-    
-6. Run Map Reduce jobs
+    rake crash:update_locations[mn-1997-2011-locations.csv]
 
-    rake crashes:map_reduce
+8. Generate crash clusters
+
+    rake crash:build_clusters[2011,2011]

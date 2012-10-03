@@ -7,9 +7,9 @@
       if (locationIds && locationIds.length > 0) {
         $.each(locationIds, function(index, locationId) {
           map.draw(locationId);
-          $("#" + locationId).on("click", function(e) {
+          $("#location").on("change", function(e) {
             e.preventDefault();
-            map.center(locationId);
+            map.center(this.value);
           });
         });
         
@@ -20,10 +20,9 @@
     });
     
 .content
-  - @locations.each do |location|
-    .row
-      .span12
-        = link_to location.label, "#", id: location.id
+  .row
+    .span12
+      = select_tag :location, options_from_collection_for_select(@locations, :id, :label)
   .row
     .span12
       %div{:style => "display: inline-block; position: relative; width: 100%;"}
