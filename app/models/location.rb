@@ -24,6 +24,7 @@ class Location
   
   def as_json options = {}
     {
+      id: self.id,
       label: self.label,
       zoom: self.zoom,
       center_lat: (self.sw_lat + self.ne_lat) / 2,

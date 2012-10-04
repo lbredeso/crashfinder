@@ -29,9 +29,13 @@ var LocationMap = function() {
         location: location
       },
       success: function(response) {
+        var location = response;
         rectangle.setOptions({
           editable: true
         });
+        if (method == 'POST') {
+          $('#location').append('<option value="' + location.id + '">' + location.label + '</option>');
+        }
       }
     });
   };
