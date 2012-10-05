@@ -8,7 +8,7 @@ var Trends = function() {
   ];
   
   return {
-    yearly: function(locationIds) {
+    yearly: function() {
       var r = Raphael("yearly");
       
       $.ajax({
@@ -16,6 +16,10 @@ var Trends = function() {
         dataType: 'json',
         success: function(response) {
           var yearStats = response;
+          
+          var minYear = parseInt(_.first(yearStats).year);
+          var maxYear = parseInt(_.last(yearStats).year);
+          
           var groupedYearStats = _.groupBy(yearStats, "locationId");
           
           // The location labels, for our legend
@@ -46,7 +50,8 @@ var Trends = function() {
               nostroke: false,   // lines between points are drawn
               axis: "0 0 1 1",   // draw axes on the left and bottom
               smooth: true,      // curve the lines to smooth turns on the chart
-              colors: _.first(colors, labels.length)
+              colors: _.first(colors, labels.length),
+              axisxstep: maxYear - minYear
             }
           );
           
@@ -66,7 +71,7 @@ var Trends = function() {
       });
     },
     
-    monthly: function(locationIds) {
+    monthly: function() {
       var r = Raphael("monthly");
       
       $.ajax({
@@ -104,7 +109,8 @@ var Trends = function() {
               nostroke: false,   // lines between points are drawn
               axis: "0 0 1 1",   // draw axes on the left and bottom
               smooth: true,      // curve the lines to smooth turns on the chart
-              colors: _.first(colors, labels.length)
+              colors: _.first(colors, labels.length),
+              axisxstep: 11
             }
           );
           
@@ -120,11 +126,19 @@ var Trends = function() {
      	                           .attr({fill: "#000", "text-anchor": "start"}));
      	      x += chart.labels[i].getBBox().width * 1.2;
      	    };
+          
+          var monthNames = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"];
+          var axisItems = chart.axis[0].text.items;
+          for( var i = 0, l = axisItems.length; i < l; i++ ) {
+            var monthName = monthNames[axisItems[i].attr("text")];
+            axisItems[i].attr("text", monthName);
+          }
         }
       });
     },
     
-    daily: function(locationIds) {
+    daily: function() {
       var r = Raphael("daily");
       
       $.ajax({
@@ -162,7 +176,8 @@ var Trends = function() {
               nostroke: false,   // lines between points are drawn
               axis: "0 0 1 1",   // draw axes on the left and bottom
               smooth: true,      // curve the lines to smooth turns on the chart
-              colors: _.first(colors, labels.length)
+              colors: _.first(colors, labels.length),
+              axisxstep: 30
             }
           );
           

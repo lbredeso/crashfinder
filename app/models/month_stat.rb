@@ -46,7 +46,7 @@ class MonthStat
     {
       locationId: self.id['location_id'],
       label: self.id['label'],
-      month: self.id['month'],
+      month: self.id['month'].to_i - 1,
       count: self.value
     }
   end
