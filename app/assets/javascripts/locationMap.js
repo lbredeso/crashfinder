@@ -20,6 +20,18 @@ var LocationMap = function() {
     if (method == 'POST') {
       location['label'] = prompt("What do you want to call this location?");
     }
+    var opts = {
+      lines: 12, // The number of lines to draw
+		  length: 7, // The length of each line
+		  width: 5, // The line thickness
+		  radius: 10, // The radius of the inner circle
+		  color: '#fff', // #rbg or #rrggbb
+		  speed: 1, // Rounds per second
+		  trail: 66, // Afterglow percentage
+		  shadow: true // Whether to render a shadow
+    };
+    var spinner = new Spinner(opts).spin();
+    $('#spinner').show().append(spinner.el);
     
     $.ajax({
       url: "/locations" + (locationId ? "/" + locationId : ""),
@@ -29,6 +41,8 @@ var LocationMap = function() {
         location: location
       },
       success: function(response) {
+        spinner.stop();
+        $('#spinner').hide();
         var location = response;
         rectangle.setOptions({
           editable: true

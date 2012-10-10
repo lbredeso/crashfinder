@@ -12,4 +12,5 @@
 //= require g.raphael-min
 //= require g.line-min
 //= require underscore
+//= require spin
 //= require_tree .
