@@ -58,10 +58,11 @@ module MN
       # Time
       if version == :v1
         crash[:hour] = crash[:acchour]
+        crash.delete :acchour
       else
         crash[:hour] = crash[:acctim2][0,2]
+        crash.delete :acctim2
       end
-      crash.delete :acctim2
       
       if crash[:city]
         # Townships are a weird case, as they are uniquely identified by county + township code

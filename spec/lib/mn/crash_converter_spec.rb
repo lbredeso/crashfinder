@@ -9,6 +9,7 @@ describe MN::CrashConverter do
   
   it "should convert a line into a hash" do
     File.open("spec/lib/mn/crash.txt").each_line.with_index do |line, index|
+      crash = {}
       case index
         when 0
           crash_converter = MN::CrashConverter.new "1997"
@@ -47,6 +48,8 @@ describe MN::CrashConverter do
           crash[:route_id].should == "0533800160"
           crash[:mile_point].should == 0.056
       end
+      crash[:acctim2].should be_nil
+      crash[:acchour].should be_nil
     end
   end
 end
