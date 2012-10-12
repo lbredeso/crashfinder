@@ -6,7 +6,6 @@ class Crash
   key :year, String
   key :weekday, String
   key :hour, String
-  key :minute, String
   key :lng, Float
   key :lat, Float
   

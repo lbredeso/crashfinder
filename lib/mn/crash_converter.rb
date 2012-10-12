@@ -55,6 +55,14 @@ module MN
       crash[:weekday] = Date.strptime(crash[:accdate], "%m/%d/%Y").strftime("%A")
       crash.delete :accdate
       
+      # Time
+      if version == :v1
+        crash[:hour] = crash[:acchour]
+      else
+        crash[:hour] = crash[:acctim2][0,2]
+      end
+      crash.delete :acctim2
+      
       if crash[:city]
         # Townships are a weird case, as they are uniquely identified by county + township code
         # They also are thrown in with the city code, in cases where the city isn't known (e.g. rural crashes).

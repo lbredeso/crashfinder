@@ -15,11 +15,11 @@ module ND
         crash[:year] = $1
         crash[:month] = $2
         crash[:day] = $3
+        crash[:weekday] = Date.strptime("#{crash[:month]}/#{crash[:day]}/#{crash[:year]}", "%m/%d/%Y").strftime("%A")
         
         # Time
         row[0][6] =~ /[\d]{4}\-[\d]{2}\-[\d]{2}\ ([\d]{2}):([\d]{2}):00/
         crash[:hour] = $1
-        crash[:minute] = $2
         
         # Location
         crash[:lat] = row[0][7].to_f

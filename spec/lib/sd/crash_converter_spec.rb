@@ -9,7 +9,7 @@ describe SD::CrashConverter do
   
   it "should convert a line into a hash" do
     crash_converter = SD::CrashConverter.new "2011"
-    File.open("spec/lib/sd/crash.csv").each_line.with_index do |line, index|
+    File.open("spec/lib/sd/crash.txt").each_line.with_index do |line, index|
       crash = crash_converter.convert line
       case index
         when 0
@@ -20,9 +20,9 @@ describe SD::CrashConverter do
           crash[:_type].should == "SD::Crash"
           crash[:month].should == "01"
           crash[:day].should == "01"
+          crash[:weekday].should == "Saturday"
           crash[:year].should == "2011"
           crash[:hour].should == "17"
-          crash[:minute].should == "00"
           crash[:lat].should == 44.273045
           crash[:lng].should == -103.735260
         when 2
@@ -30,9 +30,9 @@ describe SD::CrashConverter do
           crash[:_type].should == "SD::Crash"
           crash[:month].should == "10"
           crash[:day].should == "23"
+          crash[:weekday].should == "Saturday"
           crash[:year].should == "2004"
           crash[:hour].should == "22"
-          crash[:minute].should == "49"
           crash[:lat].should == 42.793721
           crash[:lng].should == -96.943114
         when 3
@@ -40,9 +40,9 @@ describe SD::CrashConverter do
           crash[:_type].should == "SD::Crash"
           crash[:month].should == "01"
           crash[:day].should == "03"
+          crash[:weekday].should == "Monday"
           crash[:year].should == "2011"
           crash[:hour].should == "08"
-          crash[:minute].should == "55"
           crash[:lat].should == 43.608895
           crash[:lng].should == -96.939219
       end

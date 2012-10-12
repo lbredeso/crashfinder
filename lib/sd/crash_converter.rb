@@ -24,7 +24,7 @@ module SD
         crash[:day] = $2.to_s.rjust 2, "0"
         crash[:year] = $3
         crash[:hour] = ($4.to_i + ($7 == "PM" ? 12 : 0)).to_s.rjust(2, "0")
-        crash[:minute] = $5
+        crash[:weekday] = Date.strptime("#{crash[:month]}/#{crash[:day]}/#{crash[:year]}", "%m/%d/%Y").strftime("%A")
         
         # Location
         crash[:lat] = row[0][100].to_f
