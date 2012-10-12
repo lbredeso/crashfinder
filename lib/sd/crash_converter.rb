@@ -8,6 +8,10 @@ module SD
     
     def convert line
       crash = {}
+      
+      # There's some illegal quoting going on, like O"BRIEN.
+      line.gsub! "\"", "'"
+      
       row = CSV.parse line, { col_sep: "|" }
       unless row[0][0] == "AccidentSeqID"
         puts "Loading SD crash #{row[0][1]}"

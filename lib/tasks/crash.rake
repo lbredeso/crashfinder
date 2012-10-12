@@ -1,6 +1,7 @@
 require 'mn/crash_converter'
 require 'mn/location_generator'
 require 'nd/crash_converter'
+require 'sd/crash_converter'
 require 'set'
 require 'csv'
 

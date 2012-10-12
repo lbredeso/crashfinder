@@ -26,15 +26,15 @@ describe SD::CrashConverter do
           crash[:lat].should == 44.273045
           crash[:lng].should == -103.735260
         when 2
-          crash[:_id].should == "SD-1100002"
+          crash[:_id].should == "SD-412402"
           crash[:_type].should == "SD::Crash"
-          crash[:month].should == "01"
-          crash[:day].should == "01"
-          crash[:year].should == "2011"
-          crash[:hour].should == "23"
-          crash[:minute].should == "40"
-          crash[:lat].should == 44.703862
-          crash[:lng].should == -100.066176
+          crash[:month].should == "10"
+          crash[:day].should == "23"
+          crash[:year].should == "2004"
+          crash[:hour].should == "22"
+          crash[:minute].should == "49"
+          crash[:lat].should == 42.793721
+          crash[:lng].should == -96.943114
         when 3
           crash[:_id].should == "SD-1100146"
           crash[:_type].should == "SD::Crash"
