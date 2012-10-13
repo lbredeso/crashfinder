@@ -23,7 +23,8 @@ gem 'haml-rails'
 gem 'jruby-openssl'
 # gem 'trinidad'
 gem 'puma'
-gem 'sorcery'
+gem 'omniauth'
+gem 'omniauth-browserid'
 
 # Use unicorn as the web server  	
 # gem 'unicorn'

@@ -1,18 +1,18 @@
 class SessionsController < ApplicationController
-  def new
-  end
-
   def create
-    user = login(params[:email], params[:password], params[:remember_me])
-    if user
-      redirect_back_or_to root_url, :notice => "Logged in!"
-    else
-      redirect_to login_path, notice: "Email or password was invalid."
-    end
+    user = User.find_by_provider_and_uid(auth["provider"], auth["uid"]) || User.create_with_omniauth(auth)
+    session[:user_id] = user.id
+    redirect_to root_url, :notice => "Signed in!"
   end
   
   def destroy
-    logout
-    redirect_to root_url, :notice => "Logged out!"
+    session[:user_id] = nil
+    redirect_to root_url, :notice => "Signed out!"
+  end
+  
+  protected
+
+  def auth
+    request.env['omniauth.auth']
   end
 end

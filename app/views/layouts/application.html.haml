@@ -6,6 +6,7 @@
     %title= content_for?(:title) ? yield(:title) : "Crash Finder"
     = csrf_meta_tags
     %script{:src => "http://maps.googleapis.com/maps/api/js?key=#{Rails.configuration.google_maps_api_key}&sensor=false&libraries=drawing", :type => "text/javascript"}
+    %script{:src => "https://browserid.org/include.js", :type => "text/javascript"}
     / Le HTML5 shim, for IE6-8 support of HTML elements
     /[if lt IE 9]
       = javascript_include_tag "http://html5shim.googlecode.com/svn/trunk/html5.js"
@@ -24,7 +25,7 @@
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
-
+      
   %body
     #spinner{:style => "display: none;"}
     .navbar.navbar-fixed-top
@@ -42,18 +43,15 @@
               - if current_user
                 %li= link_to "Locations", locations_path
                 %li= link_to "Trends", "/trends"
-                %li.dropdown
-                  %a.dropdown-toggle{:href => '#', 'data-toggle' => 'dropdown'}
-                    My Account <b class="caret"></b>
-                  %ul.dropdown-menu
-                    %li= link_to "Log out", logout_path
+                %li= link_to "Sign out", signout_path
               - else
-                %li= link_to "Log in", login_path
+                %li= link_to "Sign in", '#', id: 'signin_button'
     .container
       - flash.each do |name, msg|
         = content_tag :div, msg, :id => "flash_#{name}"
       = yield
-    
+      = form_tag signin_path("browser_id"), id: "browser_id_form" do
+        %input{:type => 'hidden', :name => 'assertion'}
       %footer
         %p &copy; Luke Bredeson 2012
     /
@@ -61,4 +59,22 @@
       \==================================================
     / Placed at the end of the document so the pages load faster
     = javascript_include_tag "application"
+    :javascript
+      var loginViaEmail = function() {
+        navigator.id.get(function(assertion) {
+          if (assertion) {
+            $('input[name=assertion]').val(assertion);
+            $('#browser_id_form').submit();
+          } else {
+            window.location = "#{root_path}";
+          }
+        });  
+      };
+
+      $(function() {
+        $('#signin_button').click(function() {
+          loginViaEmail();
+          return false;
+        });
+      });
     = yield :javascript

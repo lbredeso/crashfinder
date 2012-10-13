@@ -29,7 +29,7 @@ This project aims to aid public understanding of crash data, starting in the sta
     
 7. Load the converted latitude/longitude location file back in
 
-    rake crash:update_locations[mn-1997-2011-locations.csv]
+    rake crash:update_locations[mn,mn-1997-2011-locations.csv]
 
 8. Generate crash clusters
 

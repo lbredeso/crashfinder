@@ -1,17 +1,18 @@
 class User
   include MongoMapper::Document
-  authenticates_with_sorcery!
-  
-  attr_protected :crypted_password, :salt
 
   many :locations
 
-  key :email, String, required: true, unique: true, format: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  key :crypted_password, String
-  key :salt, String
+  key :provider, String
+  key :uid, String
+  key :name, String
+  
+  # key :email, String, required: true, unique: true, format: /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  
   timestamps!
   
-  validates_confirmation_of :password
-  validates_presence_of :password, :on => :create
+  def self.create_with_omniauth(auth)
+    User.create provider: auth["provider"], uid: auth["uid"], name: auth["info"]["name"]
+  end
   
 end

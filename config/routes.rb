@@ -27,10 +27,8 @@ Crashfinder::Application.routes.draw do
   resources :users
   resources :sessions
   
-  get "logout" => "sessions#destroy", as: "logout"
-  get "login" => "sessions#new", as: "login"
-  get "signup" => "users#new", as: "signup"
-  get "secret" => "home#secret", :as => "secret"
+  match '/auth/:provider/callback', to: 'sessions#create', as: :signin
+  match "/signout" => "sessions#destroy", as: :signout
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
