@@ -7,7 +7,6 @@ Crashfinder::Application.routes.draw do
 
   get "home/index"
 
-  get "sessions/new"
   get "users/new"
 
   root to: 'home#index'
@@ -20,7 +19,7 @@ Crashfinder::Application.routes.draw do
     collection do
       get :yearly
       get :monthly
-      get :daily
+      get :weekday
     end
   end
   

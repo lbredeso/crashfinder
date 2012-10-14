@@ -23,11 +23,11 @@ class TrendsController < ApplicationController
     end
   end
   
-  def daily
-    @day_stats = DayStat.by_user(current_user).in_order.all
+  def weekday
+    @weekday_stats = WeekdayStat.by_user(current_user).in_order.all
     respond_to do |format|
       format.json do
-        render json: @day_stats
+        render json: @weekday_stats
       end
     end
   end

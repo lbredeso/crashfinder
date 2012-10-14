@@ -1,4 +1,4 @@
-class DayStat
+class WeekdayStat
   include MongoMapper::Document
   
   key :value, Integer
@@ -13,7 +13,7 @@ class DayStat
           location_id: locationId,
           label: label,
           user_id: userId,
-          day: this.day
+          weekday: this.weekday
         }, 1);
       }
     MAP
@@ -33,7 +33,7 @@ class DayStat
   
   def self.build location
     Crash.collection.map_reduce(map, reduce, {
-      out: { merge: "day_stats" },
+      out: { merge: "weekday_stats" },
       scope: { locationId: location.id, label: location.label, userId: location.user.id },
       query: {
         lat: { '$gte' => location.sw_lat, '$lte' => location.ne_lat },
@@ -42,11 +42,21 @@ class DayStat
     })
   end
   
+  WEEKDAYS = {
+    "Sunday" => "00",
+    "Monday" => "01",
+    "Tuesday" => "02",
+    "Wednesday" => "03",
+    "Thursday" => "04",
+    "Friday" => "05",
+    "Saturday" => "06"
+  }
+  
   def as_json options = {}
     {
       locationId: self.id['location_id'],
       label: self.id['label'],
-      day: self.id['day'],
+      weekday: WEEKDAYS[self.id['weekday']],
       count: self.value
     }
   end
