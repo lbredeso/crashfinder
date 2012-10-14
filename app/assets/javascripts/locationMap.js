@@ -19,6 +19,10 @@ var LocationMap = function() {
     };
     if (method == 'POST') {
       location['label'] = prompt("What do you want to call this location?");
+      if (!location['label']) {
+        rectangle.setMap(null);
+        return;
+      }
     }
     var opts = {
       lines: 12, // The number of lines to draw
