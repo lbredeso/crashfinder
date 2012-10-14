@@ -19,7 +19,7 @@ var LocationMap = function() {
     };
     if (method == 'POST') {
       if (map.getZoom() < 15) {
-        alert("Please zoom in a bit further before creating a location.");
+        alert("Please zoom in at least " + (15 - map.getZoom()) + " more time(s) to create a location.");
         rectangle.setMap(null);
         return;
       }
