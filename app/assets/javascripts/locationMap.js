@@ -18,6 +18,11 @@ var LocationMap = function() {
       ne_lng: rectangle.getBounds().getNorthEast().lng()
     };
     if (method == 'POST') {
+      if (map.getZoom() < 15) {
+        alert("Please zoom in a bit further before creating a location.");
+        rectangle.setMap(null);
+        return;
+      }
       location['label'] = prompt("What do you want to call this location?");
       if (!location['label']) {
         rectangle.setMap(null);
