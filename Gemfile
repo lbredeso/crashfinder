@@ -25,6 +25,7 @@ gem 'jruby-openssl'
 gem 'puma'
 gem 'omniauth'
 gem 'omniauth-browserid'
+gem 'high_voltage'
 
 # Use unicorn as the web server  	
 # gem 'unicorn'

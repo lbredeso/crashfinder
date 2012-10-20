@@ -7,8 +7,6 @@ Crashfinder::Application.routes.draw do
 
   get "home/index"
 
-  get "users/new"
-
   root to: 'home#index'
   
   resources :clusters, only: [:index]
@@ -22,9 +20,6 @@ Crashfinder::Application.routes.draw do
       get :weekday
     end
   end
-  
-  resources :users
-  resources :sessions
   
   match '/auth/:provider/callback', to: 'sessions#create', as: :signin
   match "/signout" => "sessions#destroy", as: :signout

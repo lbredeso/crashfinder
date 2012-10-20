@@ -68,6 +68,7 @@ GEM
       haml (~> 3.0)
       railties (~> 3.0)
     hashie (1.2.0)
+    high_voltage (1.2.0)
     hike (1.2.1)
     i18n (0.6.0)
     journey (1.0.3)
@@ -196,6 +197,7 @@ DEPENDENCIES
   factory_girl
   haml
   haml-rails
+  high_voltage
   jquery-rails
   jquery-ui-rails
   jruby-openssl

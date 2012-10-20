@@ -27,6 +27,9 @@
       })();
       
   %body
+    - if current_user
+      %span{:id => "user-email", :style => "display: none"}
+        = current_user.uid
     #spinner{:style => "display: none;"}
     .navbar.navbar-fixed-top
       .navbar-inner
@@ -43,7 +46,7 @@
               - if current_user
                 %li= link_to "Locations", locations_path
                 %li= link_to "Trends", "/trends"
-                %li= link_to "Sign out", signout_path
+                %li= link_to "Sign out", '#', id: 'signout_button'
               - else
                 %li= link_to "Sign in", '#', id: 'signin_button'
     .container
@@ -60,21 +63,36 @@
     / Placed at the end of the document so the pages load faster
     = javascript_include_tag "application"
     :javascript
-      var loginViaEmail = function() {
-        navigator.id.get(function(assertion) {
-          if (assertion) {
-            $('input[name=assertion]').val(assertion);
-            $('#browser_id_form').submit();
-          } else {
-            window.location = "#{root_path}";
-          }
-        });  
-      };
-
       $(function() {
-        $('#signin_button').click(function() {
-          loginViaEmail();
-          return false;
+        var userEmail = $("#user-email").text().trim();
+        if (userEmail === "") {
+            userEmail = null;
+        }
+        navigator.id.watch({
+          loggedInUser: userEmail,
+          onlogin: function(assertion) {
+            if (assertion) {
+              $('input[name=assertion]').val(assertion);
+              $('#browser_id_form').submit();
+            }
+          },
+          onlogout: function() {
+            if (userEmail) {
+              window.location = '#{signout_path}';
+            }
+          }
+        });
+        $('#signin_button').click(function(e) {
+          e.preventDefault();
+          navigator.id.request({
+            siteName: 'Crash Finder',
+            returnTo: '/',
+            oncancel: function() { alert('You must share your identity in order to sign in.'); }
+          });
+        });
+        $('#signout_button').click(function(e) {
+          e.preventDefault();
+          navigator.id.logout();
         });
       });
     = yield :javascript
