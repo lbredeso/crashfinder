@@ -16,13 +16,15 @@
         Browse &raquo;
   .span3
     %h2 Locations
-    %p Create locations by using the drawing tool to draw boxes over areas of interest.
-    %p
-      %a.btn{:href => locations_path}
-        Locations &raquo;
+    %p Create locations by using the drawing tool to draw boxes over areas of interest.  Requires Sign in.
+    - if current_user
+      %p
+        %a.btn{:href => locations_path}
+          Locations &raquo;
   .span3
     %h2 Trends
-    %p View crash trends across your locations.
-    %p
-      %a.btn{:href => trends_path}
-        Trends &raquo;
+    %p View crash trends across your locations.  Requires Sign in.
+    - if current_user
+      %p
+        %a.btn{:href => trends_path}
+          Trends &raquo;
