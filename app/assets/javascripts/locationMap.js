@@ -93,7 +93,7 @@ var LocationMap = function() {
         });
         if (method == 'POST') {
           $('#location').append('<option value="' + location.id + '">' + location.label + '</option>');
-          center(location.id);
+          focus(location.id);
         }
       }
     });
@@ -108,26 +108,30 @@ var LocationMap = function() {
     });
   };
   
-  var center = function(locationId) {
-    var doCenter = function(location) {
+  var focus = function(locationId) {
+    var doFocus = function(location) {
       map.setOptions({
         center: new google.maps.LatLng(location.center_lat, location.center_lng),
         zoom: location.zoom || 16,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       });
-        
+      
+      // Force the location select to the correct location option
+      $('#location').val(location.id);
+      
+      // Set the correct locationId on the delete button
       $('#delete').data('locationId', location.id);
     }
     
     if (get(locationId)) {
-      doCenter(get(locationId).location);
+      doFocus(get(locationId).location);
     } else {
       $.ajax({
         url: "/locations/" + locationId,
         dataType: 'json',
         success: function(response) {
           var location = response;
-          doCenter(location);
+          doFocus(location);
         }
       });
     }
@@ -170,9 +174,7 @@ var LocationMap = function() {
         get(locationId).rectangle.setMap(null);
         remove(locationId);
         if (first()) {
-          center(first().location.id);
-        } else {
-          // We could technically revert to the original location-less display, but the user already knows how to use locations by this point...
+          focus(first().location.id);
         }
         $("#location option[value='" + locationId + "']").remove();
       }
@@ -184,8 +186,8 @@ var LocationMap = function() {
       blank();
     },
     
-    center: function(locationId) {
-      center(locationId);
+    focus: function(locationId) {
+      focus(locationId);
     },
     
     draw: function(locationId) {

@@ -6,7 +6,7 @@
       
       $("#location").on("change", function(e) {
         e.preventDefault();
-        map.center(this.value);
+        map.focus(this.value);
       });
       
       $('#delete').click(function(e) {
@@ -20,7 +20,7 @@
           map.draw(locationId);
         });
         
-        map.center(locationIds[0]);
+        map.focus(locationIds[0]);
       } else {
         map.blank();
       }
