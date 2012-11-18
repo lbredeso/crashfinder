@@ -40,4 +40,14 @@ class LocationsController < ApplicationController
       end
     end
   end
+  
+  def destroy
+    @location = Location.find params[:id]
+    @location.destroy
+    respond_to do |format|
+      format.json do
+        render json: {}
+      end
+    end
+  end
 end

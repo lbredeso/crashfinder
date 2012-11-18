@@ -4,13 +4,20 @@
       var map = new LocationMap();
       var locationIds = #{@locations.map { |l| l.id.to_s } };
       
+      $("#location").on("change", function(e) {
+        e.preventDefault();
+        map.center(this.value);
+      });
+      
+      $('#delete').click(function(e) {
+        e.preventDefault();
+        var locationId = $(this).data('locationId');
+        map.erase(locationId);
+      });
+      
       if (locationIds && locationIds.length > 0) {
         $.each(locationIds, function(index, locationId) {
           map.draw(locationId);
-          $("#location").on("change", function(e) {
-            e.preventDefault();
-            map.center(this.value);
-          });
         });
         
         map.center(locationIds[0]);
@@ -26,8 +33,11 @@
         %h3
           Use the drawing tools in the upper left-hand corner of the map to create new locations.
   .row
-    .span12
+    .span3
       = select_tag :location, options_from_collection_for_select(@locations, :id, :label)
+    .span9
+      %a#delete.btn{:href => top_index_path}
+        Delete
   .row
     .span12
       %div{:style => "display: inline-block; position: relative; width: 100%;"}

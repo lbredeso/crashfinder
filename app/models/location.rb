@@ -12,14 +12,16 @@ class Location
   key :ne_lat, Float
   key :ne_lng, Float
   
-  before_save do |location|
-    location.label = location.id unless location.label
-  end
-  
   after_save do |location|
     YearStat.build location
     MonthStat.build location
     WeekdayStat.build location
+  end
+  
+  before_destroy do |location|
+    YearStat.collection.remove '_id.location_id' => location.id
+    MonthStat.collection.remove '_id.location_id' => location.id
+    WeekdayStat.collection.remove '_id.location_id' => location.id
   end
   
   def as_json options = {}
