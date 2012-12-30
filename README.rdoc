@@ -34,3 +34,13 @@ This project aims to aid public understanding of crash data, starting in the sta
 8. Generate crash clusters
 
     rake crash:build_clusters[2011,2011]
+	
+== Deployment
+
+1. Generate a secret
+
+	rake secret
+
+2. Set it in Heroku (or some other production environment)
+
+	heroku config:set SECRET_TOKEN={{your secret token}}
