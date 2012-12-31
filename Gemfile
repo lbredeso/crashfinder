@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.0"
+ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.1"
 
 gem 'rails', '~> 3.2.0'
   	
@@ -20,7 +20,7 @@ gem 'pry'
 gem 'pry-rails'
 gem 'twitter-bootstrap-rails', :github => 'seyhunak/twitter-bootstrap-rails'
 gem 'haml-rails'
-gem 'jruby-openssl'
+gem 'jruby-openssl', '~> 0.8.2'
 # gem 'trinidad'
 gem 'puma'
 gem 'omniauth'
