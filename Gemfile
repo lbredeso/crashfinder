@@ -3,7 +3,7 @@ ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.1"
 
 gem 'rails', '~> 3.2.0'
   	
-gem 'mongo_mapper', '0.11.0'
+gem 'mongo_mapper', '0.12.0'
 gem 'haml'
  	
 # Gems used only for assets and not required	  	
