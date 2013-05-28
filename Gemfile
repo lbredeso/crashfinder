@@ -1,9 +1,10 @@
 source 'http://rubygems.org'
-ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.1"
+ruby "1.9.3", :engine => "jruby", :engine_version => "1.7.4"
 
 gem 'rails', '~> 3.2.0'
   	
 gem 'mongo_mapper', '0.12.0'
+gem 'mongo', '~> 1.8.6'
 gem 'haml'
  	
 # Gems used only for assets and not required	  	
@@ -19,8 +20,10 @@ end
 gem 'pry'	  	
 gem 'pry-rails'
 gem 'twitter-bootstrap-rails', :github => 'seyhunak/twitter-bootstrap-rails'
+gem 'therubyrhino'
+gem 'less-rails-bootstrap'
 gem 'haml-rails'
-gem 'jruby-openssl', '~> 0.8.2'
+gem 'jruby-openssl', :require => false 
 # gem 'trinidad'
 gem 'puma'
 gem 'omniauth'

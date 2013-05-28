@@ -8,7 +8,7 @@ describe MN::CrashConverter do
   end
   
   it "should convert a line into a hash" do
-    File.open("spec/lib/mn/crash.txt").each_line.with_index do |line, index|
+    File.open("#{Rails.root}/spec/lib/mn/crash.txt").each_line.with_index do |line, index|
       crash = {}
       case index
         when 0

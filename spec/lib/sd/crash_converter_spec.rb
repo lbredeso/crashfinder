@@ -9,7 +9,7 @@ describe SD::CrashConverter do
   
   it "should convert a line into a hash" do
     crash_converter = SD::CrashConverter.new "2011"
-    File.open("spec/lib/sd/crash.txt").each_line.with_index do |line, index|
+    File.open("#{Rails.root}/spec/lib/sd/crash.txt").each_line.with_index do |line, index|
       crash = crash_converter.convert line
       case index
         when 0

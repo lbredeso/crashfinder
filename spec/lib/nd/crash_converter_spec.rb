@@ -4,7 +4,7 @@ require 'nd/crash_converter'
 describe ND::CrashConverter do
   it "should convert a line into a hash" do
     crash_converter = ND::CrashConverter.new
-    File.open("spec/lib/nd/crash.txt").each_line.with_index do |line, index|
+    File.open("#{Rails.root}/spec/lib/nd/crash.txt").each_line.with_index do |line, index|
       crash = crash_converter.convert line
       case index
         when 0
