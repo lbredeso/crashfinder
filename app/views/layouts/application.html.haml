@@ -5,11 +5,11 @@
     %meta(name="viewport" content="width=device-width, initial-scale=1.0")
     %title= content_for?(:title) ? yield(:title) : "Crash Finder"
     = csrf_meta_tags
-    %script{:src => "http://maps.googleapis.com/maps/api/js?key=#{Rails.configuration.google_maps_api_key}&sensor=false&libraries=drawing", :type => "text/javascript"}
+    %script{:src => "https://maps.googleapis.com/maps/api/js?key=#{Rails.configuration.google_maps_api_key}&sensor=false&libraries=drawing", :type => "text/javascript"}
     %script{:src => "https://browserid.org/include.js", :type => "text/javascript"}
     / Le HTML5 shim, for IE6-8 support of HTML elements
     /[if lt IE 9]
-      = javascript_include_tag "http://html5shim.googlecode.com/svn/trunk/html5.js"
+      = javascript_include_tag "https://html5shim.googlecode.com/svn/trunk/html5.js"
     = stylesheet_link_tag "application", :media => "all"
     %link(href="images/favicon.ico" rel="shortcut icon")
     %link(href="images/apple-touch-icon.png" rel="apple-touch-icon")
@@ -82,7 +82,7 @@
             }
           }
         });
-        $('#signin_button').click(function(e) {
+        $('#signin_button').on('click', function(e) {
           e.preventDefault();
           navigator.id.request({
             siteName: 'Crash Finder',
@@ -90,7 +90,7 @@
             oncancel: function() { alert('You must share your identity in order to sign in.'); }
           });
         });
-        $('#signout_button').click(function(e) {
+        $('#signout_button').on('click', function(e) {
           e.preventDefault();
           navigator.id.logout();
         });

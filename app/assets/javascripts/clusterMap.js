@@ -56,7 +56,7 @@ var ClusterMap = function() {
                 var crash = new google.maps.Marker({
                   position: new google.maps.LatLng(crashData.lat, crashData.lng),
                   map: map,
-                  icon: "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|" + color.toHex(crashData.count) + "|FFFFFF"
+                  icon: "https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=|" + color.toHex(crashData.count) + "|FFFFFF"
                 });
                 markers.push(crash);
             
