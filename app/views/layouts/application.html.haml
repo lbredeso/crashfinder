@@ -53,8 +53,6 @@
       - flash.each do |name, msg|
         = content_tag :div, msg, :id => "flash_#{name}"
       = yield
-      = form_tag signin_path("browser_id"), id: "browser_id_form" do
-        %input{:type => 'hidden', :name => 'assertion'}
       %footer
         %p &copy; Luke Bredeson 2012
     /
@@ -71,10 +69,16 @@
         navigator.id.watch({
           loggedInUser: userEmail,
           onlogin: function(assertion) {
-            if (assertion) {
-              $('input[name=assertion]').val(assertion);
-              $('#browser_id_form').submit();
-            }
+            $.ajax({
+              type: 'POST',
+              url: '#{signin_path("browser_id")}',
+              data: { assertion: assertion },
+              success: function(res, status, xhr) { window.location.reload(); },
+              error: function(xhr, status, err) {
+                navigator.id.logout();
+                alert("Login failure: " + err);
+              }
+            });
           },
           onlogout: function() {
             if (userEmail) {
