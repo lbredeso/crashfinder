@@ -81,18 +81,17 @@
             });
           },
           onlogout: function() {
-            if (userEmail) {
-              window.location = '#{signout_path}';
-            }
+            $.ajax({
+              type: 'POST',
+              url: '#{signout_path}',
+              success: function(res, status, xhr) { window.location.reload(); },
+              error: function(xhr, status, err) { alert("Logout failure: " + err); }
+            });
           }
         });
         $('#signin_button').on('click', function(e) {
           e.preventDefault();
-          navigator.id.request({
-            siteName: 'Crash Finder',
-            returnTo: '/',
-            oncancel: function() { alert('You must share your identity in order to sign in.'); }
-          });
+          navigator.id.request();
         });
         $('#signout_button').on('click', function(e) {
           e.preventDefault();
