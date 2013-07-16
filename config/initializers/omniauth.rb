@@ -3,5 +3,5 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 
 if Rails.env.production?
-  OmniAuth.config.full_host = 'https://www.crashfinder.org'
+  OmniAuth.config.full_host = 'www.crashfinder.org'
 end
