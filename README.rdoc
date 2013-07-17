@@ -9,38 +9,33 @@ This project aims to aid public understanding of crash data, starting in the sta
 2. Load seed data
 
     rake db:seed
+    
+3. Copy desired crash data to crashfinder/lib/data/(mn|nd|sd) for any of the following states (only MN will be supported in the future)
+    
+    http://s3.amazonaws.com/crashfinder/mn.zip
+    http://s3.amazonaws.com/crashfinder/nd.zip
+    http://s3.amazonaws.com/crashfinder/sd.zip
 
-3. Load crash data for any states and years you wish
+4. Load crash data for any states and years you wish
     
     rake crash:load[mn,1997,2002]
     rake crash:load[mn,2004,2011]
     rake crash:load_file[nd,nd-2005-2012.csv]
-    db.crashes.remove({_type: "ND::Crash", year: "2012"})
 
-4. Add indexes
+5. Add MongoDB indexes
 
     rake db:index
     
-5. Generate location file
+6. (Optional) Generate location file for the specified year
 
     rake crash:generate_location_file[2011]
     
-6. Use mn_location_finder to convert these locations to a latitude/longitude file
+7. (Optional) Use mn_location_converter (not open sourced yet) to convert these locations to a latitude/longitude file
     
-7. Load the converted latitude/longitude location file back in
+8. Load the converted latitude/longitude location file back in
 
     rake crash:update_locations[mn,mn-1997-2011-locations.csv]
 
-8. Generate crash clusters
+9. Generate crash clusters
 
     rake crash:build_clusters[2011,2011]
-	
-== Deployment
-
-1. Generate a secret
-
-	rake secret
-
-2. Set it in Heroku (or some other production environment)
-
-	heroku config:set SECRET_TOKEN={{your secret token}}
