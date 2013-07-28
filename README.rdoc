@@ -28,7 +28,7 @@ This project aims to aid public understanding of crash data, starting in the sta
     
 6. (Optional) Generate location file for the specified year
 
-    rake crash:generate_location_file[2011]
+    rake crash:generate_location_file[mn,2011,2011]
     
 7. (Optional) Use mn_location_converter (not open sourced yet) to convert these locations to a latitude/longitude file
     

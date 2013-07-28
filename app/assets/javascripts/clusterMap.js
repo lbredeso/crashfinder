@@ -1,7 +1,7 @@
 var ClusterMap = function() {
   return {
     draw: function() {
-      var currentYear = 2011;
+      var currentYear = 2012;
       var currentZoom = 5;
   
       var mapOptions = {
